@@ -1,6 +1,7 @@
 package route
 
 import (
+	"SMSM/pkg/utils"
 	"bytes"
 	"fmt"
 	"net/http"
@@ -8,11 +9,12 @@ import (
 )
 
 type PageData struct {
-	Title   string
-	Content string
+	TabTitle string
+	Body     string
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
+	utils.Log("Page Home ouverte")
 	data := HomeData{}
 
 	renderFile("Accueil", render("home", data), w)
@@ -20,8 +22,8 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 func renderFile(title string, content string, w http.ResponseWriter) {
 	data := PageData{
-		Title:   title,
-		Content: content,
+		TabTitle: title,
+		Body:     content,
 	}
 
 	executeHTML("layout", data, w)
