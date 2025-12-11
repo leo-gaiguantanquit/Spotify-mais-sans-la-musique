@@ -1,7 +1,7 @@
 package route
 
 import (
-	"fmt"
+	"SMSM/pkg/utils"
 	"log"
 	"net/http"
 )
@@ -12,6 +12,7 @@ func Launch() {
 	fs := http.FileServer(http.Dir("assets"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	fmt.Println("Server launch at : http://localhost:8080")
+	utils.Log("Server started at : http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
+
 }
