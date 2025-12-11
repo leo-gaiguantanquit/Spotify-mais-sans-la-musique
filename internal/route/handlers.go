@@ -1,5 +1,10 @@
 package route
 
+import "net/http"
+
 func Launch() {
-	//TODO: Ajouter la config server et les handlers
+	http.HandleFunc("/", home)
+
+	fs := http.FileServer(http.Dir("assets"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 }
