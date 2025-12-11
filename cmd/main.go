@@ -1,5 +1,9 @@
 package main
 
+import (
+	"SMSM/internal/route"
+)
+
 func main() {
-	// TODO :  lancer le serveur
+	route.Launch()
 }
