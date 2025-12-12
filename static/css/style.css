@@ -1,0 +1,211 @@
+:root {
+	--bg: #0f1720; 
+	--nav-bg: #121212; 
+	--accent: #1DB954;
+	--muted: #9AA0A6;
+	--text: #FFFFFF;
+
+	--surface: rgba(255,255,255,0.02);
+	--surface-2: rgba(255,255,255,0.03);
+	--border: rgba(255,255,255,0.06);
+}
+
+/*theme clair*/
+.theme-light {
+	--bg: #f6f8fb;
+	--nav-bg: #ffffff;
+	--accent: #1DB954;
+	--muted: #6b7280;
+	--text: #0f1720;
+
+	--surface: rgba(0,0,0,0.04);
+	--surface-2: rgba(0,0,0,0.06);
+	--border: rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	background: var(--bg);
+	color: var(--text);
+	line-height: 1.4;
+}
+
+/* Navbar */
+.nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.6rem 1rem;
+	background: linear-gradient(180deg, color-mix(in srgb, var(--nav-bg) 96%, transparent 4%), var(--nav-bg));
+	border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent 40%);
+	position: sticky;
+	top: 0;
+	z-index: 1000;
+}
+
+.nav__logo {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+.nav__logo img {
+	height: 48px;
+	width: auto;
+	display: block;
+	transition: opacity 180ms ease, filter 180ms ease;
+	opacity: 1;
+}
+
+.nav__links {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.nav__links li {
+	margin: 0;
+}
+.nav__links a {
+	color: var(--muted);
+	text-decoration: none;
+	padding: 0.45rem 0.6rem;
+	border-radius: 6px;
+	transition: all 120ms ease-in-out;
+	font-weight: 600;
+}
+.nav__links a:hover {
+	color: var(--text);
+	background: var(--surface-2);
+}
+
+/* Search and buttons inside nav__links */
+.nav__search { display: flex; gap: 0.4rem; align-items: center; }
+.nav__search input[type="search"] {
+	padding: 0.45rem 0.6rem;
+	border-radius: 999px;
+	border: 1px solid var(--border);
+	background: var(--surface);
+	color: var(--text);
+	outline: none;
+	width: 220px;
+}
+.nav__search input[type="search"]::placeholder{
+	color: rgba(255,255,255,0.45);
+}
+.nav__links input[type="button"],
+.nav__links button,
+.nav__links .btn {
+	padding: 0.45rem 0.9rem;
+	border-radius: 999px;
+	border: none;
+	cursor: pointer;
+	font-weight: 700;
+}
+.nav__links button.btn--search,
+.nav__links .btn--search,
+.nav__links input[type="button"][value="Rechercher"] {
+	background: rgba(255,255,255,0.08);
+	color: var(--text);
+}
+.nav__links button.btn--outline,
+.nav__links .btn--outline,
+.nav__links input[type="button"][value="Se connecter"] {
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.08);
+	color: var(--text);
+}
+.nav__links input[type="button"]:hover,
+.nav__links button:hover,
+.nav__links .btn:hover{
+	transform: translateY(-1px);
+}
+
+/* Theme toggle (checkbox styled as a pill switch) */
+.nav__links input[type="checkbox"] {
+	/* remove native appearance */
+	-webkit-appearance: none;
+	appearance: none;
+
+	/* size & layout */
+	width: 46px;
+	height: 26px;
+	border-radius: 999px;
+	border: 1px solid rgba(255,255,255,0.06);
+	background-color: rgba(255,255,255,0.06);
+	margin-left: 0.6rem;
+	cursor: pointer;
+	display: inline-block;
+	vertical-align: middle;
+
+	/* track + knob (knob simulated with radial-gradient) */
+	background-color: var(--surface);
+	background-image: radial-gradient(circle at 6px 50%, #fff 9px, transparent 10px);
+	background-repeat: no-repeat;
+	background-position: 6px center;
+	transition: background-color 160ms ease, background-position 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+	outline: none;
+	border: 1px solid var(--border);
+}
+
+/* checked state - move knob to the right & colorize track */
+.nav__links input[type="checkbox"]:checked {
+	background-color: var(--accent);
+	background-image: radial-gradient(circle at calc(100% - 6px) 50%, #fff 9px, transparent 10px);
+	border-color: color-mix(in srgb, var(--accent) 60%, transparent 40%);
+}
+
+/* focus / active states */
+.nav__links input[type="checkbox"]:focus {
+	box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent 90%);
+}
+
+/* small layout tweaks to align toggle with links (already centered by .nav__links) */
+@media (max-width: 768px) {
+	.nav {
+		padding: 0.6rem 0.8rem;
+		gap: 0.5rem;
+	}
+	.nav__title { display: none; }
+	.nav__links {
+		gap: 0.5rem;
+		overflow-x: auto;
+	}
+	.nav__links input[type="search"] { width: 140px; }
+	.nav__links input[type="checkbox"] {
+		margin-left: 0.4rem;
+		width: 42px;
+		height: 24px;
+		background-image: radial-gradient(circle at 5px 50%, #fff 8.5px, transparent 9px);
+	}
+}
+
+/* Very small screens: collapse further */
+@media (max-width: 420px) {
+	.nav__links input[type="search"] { width: 110px; }
+	.nav__logo img { height: 40px; }
+	.nav__links input[type="checkbox"] {
+		width: 38px;
+		height: 22px;
+		background-image: radial-gradient(circle at 5px 50%, #fff 7.5px, transparent 8px);
+	}
+}
+
+/* small utility spacing for main content */
+.container { max-width: 1100px; margin: 1.2rem auto; padding: 0 1rem; }
+
+/* small visual polish when hovering the switch */
+.nav__links input[type="checkbox"]:hover {
+	filter: brightness(1.06);
+}
+
+/* s'il y a inversion ou filtre appliqué en fallback, ne pas l'appliquer en theme clair */
+.theme-light .nav__logo img {
+	filter: none;
+}
+
