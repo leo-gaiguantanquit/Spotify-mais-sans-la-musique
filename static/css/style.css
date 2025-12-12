@@ -1,5 +1,4 @@
 /* =================== VARIABLES / COULEURS =================== */
-/* Ici on définit des variables CSS (faciles à réutiliser et à changer) */
 /* --bg: couleur de fond principale, --accent: couleur d'accent, etc. */
 :root {
     --bg: #0f1720; /* fond sombre par défaut */
