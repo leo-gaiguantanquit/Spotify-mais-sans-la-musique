@@ -1,211 +1,248 @@
+/* =================== VARIABLES / COULEURS =================== */
+/* Ici on définit des variables CSS (faciles à réutiliser et à changer) */
+/* --bg: couleur de fond principale, --accent: couleur d'accent, etc. */
 :root {
-	--bg: #0f1720; 
-	--nav-bg: #121212; 
-	--accent: #1DB954;
-	--muted: #9AA0A6;
-	--text: #FFFFFF;
+    --bg: #0f1720; /* fond sombre par défaut */
+    --nav-bg: #121212; /* fond de la barre de navigation */
+    --accent: #1DB954; /* accent vert (spotify-like) */
+    --muted: #9AA0A6; /* couleur pour éléments "muets" */
+    --text: #FFFFFF; /* couleur du texte principal */
 
-	--surface: rgba(255,255,255,0.02);
-	--surface-2: rgba(255,255,255,0.03);
-	--border: rgba(255,255,255,0.06);
+    /* surfaces/contours: petites opacités pour effets d'élévation et bordures */
+    --surface: rgba(255,255,255,0.02);
+    --surface-2: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.06);
 }
 
-/*theme clair*/
+/* Thème clair: écrase les variables si la page a la classe .theme-light */
 .theme-light {
-	--bg: #f6f8fb;
-	--nav-bg: #ffffff;
-	--accent: #1DB954;
-	--muted: #6b7280;
-	--text: #0f1720;
+    --bg: #f6f8fb;
+    --nav-bg: #ffffff;
+    --accent: #1DB954;
+    --muted: #6b7280;
+    --text: #0f1720;
 
-	--surface: rgba(0,0,0,0.04);
-	--surface-2: rgba(0,0,0,0.06);
-	--border: rgba(0,0,0,0.08);
+    --surface: rgba(0,0,0,0.04);
+    --surface-2: rgba(0,0,0,0.06);
+    --border: rgba(0,0,0,0.08);
 }
 
+/* =================== RÉINITIALISATION / BASE =================== */
+/* box-sizing universel (utile pour ne pas soucier du calcul largeur) */
 * { box-sizing: border-box; }
+
+/* s'assurer que la page prend toute la hauteur */
 html, body { height: 100%; }
+
+/* styles de base du <body> (police, couleur, fond, interlignes) */
 body {
-	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-	background: var(--bg);
-	color: var(--text);
-	line-height: 1.4;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.4;
 }
 
-/* Navbar */
+/* =================== NAVBAR =================== */
+/* barre principale en haut: sticky (reste en haut), flex pour aligner items */
 .nav {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 1rem;
-	padding: 0.6rem 1rem;
-	background: linear-gradient(180deg, color-mix(in srgb, var(--nav-bg) 96%, transparent 4%), var(--nav-bg));
-	border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent 40%);
-	position: sticky;
-	top: 0;
-	z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--nav-bg) 96%, transparent 4%), var(--nav-bg));
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent 40%);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
+/* =================== LOGO =================== */
+/* petit conteneur pour logo + texte éventuel */
 .nav__logo {
-	display: flex;
-	align-items: center;
-	gap: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
 }
+
+/* image du logo: dimension fixe en hauteur et transitions douces */
 .nav__logo img {
-	height: 48px;
-	width: auto;
-	display: block;
-	transition: opacity 180ms ease, filter 180ms ease;
-	opacity: 1;
+    height: 48px;
+    width: auto;
+    display: block;
+    transition: opacity 180ms ease, filter 180ms ease;
+    opacity: 1;
 }
 
+/* =================== LIENS DE NAVIGATION =================== */
+/* conteneur de liens (flex row, aucun bullet, espacement) */
 .nav__links {
-	display: flex;
-	align-items: center;
-	gap: 0.6rem;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-.nav__links li {
-	margin: 0;
-}
-.nav__links a {
-	color: var(--muted);
-	text-decoration: none;
-	padding: 0.45rem 0.6rem;
-	border-radius: 6px;
-	transition: all 120ms ease-in-out;
-	font-weight: 600;
-}
-.nav__links a:hover {
-	color: var(--text);
-	background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-/* Search and buttons inside nav__links */
+/* chaque lien sans margin */
+.nav__links li {
+    margin: 0;
+}
+
+/* style des liens: couleur "muette", padding, arrondi et hover */
+.nav__links a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    transition: all 120ms ease-in-out;
+    font-weight: 600;
+}
+
+/* au survol on rend visible le lien et on applique un fond discret */
+.nav__links a:hover {
+    color: var(--text);
+    background: var(--surface-2);
+}
+
+/* =================== RECHERCHE ET BOUTONS DANS LA NAV =================== */
+/* conteneur pour la barre de recherche et boutons (alignés horizontalement) */
 .nav__search { display: flex; gap: 0.4rem; align-items: center; }
+
+/* champ de recherche: arrondi, fond et bord léger, largeur fixée */
 .nav__search input[type="search"] {
-	padding: 0.45rem 0.6rem;
-	border-radius: 999px;
-	border: 1px solid var(--border);
-	background: var(--surface);
-	color: var(--text);
-	outline: none;
-	width: 220px;
+    padding: 0.45rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    width: 220px;
 }
+
+/* couleur du placeholder */
 .nav__search input[type="search"]::placeholder{
-	color: rgba(255,255,255,0.45);
+    color: rgba(255,255,255,0.45);
 }
+
+/* boutons et inputs stylisés pour ressembler à des "pills" */
 .nav__links input[type="button"],
 .nav__links button,
 .nav__links .btn {
-	padding: 0.45rem 0.9rem;
-	border-radius: 999px;
-	border: none;
-	cursor: pointer;
-	font-weight: 700;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
 }
+
+/* bouton "Rechercher": fond sombre léger */
 .nav__links button.btn--search,
 .nav__links .btn--search,
 .nav__links input[type="button"][value="Rechercher"] {
-	background: rgba(255,255,255,0.08);
-	color: var(--text);
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
 }
+
+/* bouton "Se connecter": outline visible */
 .nav__links button.btn--outline,
 .nav__links .btn--outline,
 .nav__links input[type="button"][value="Se connecter"] {
-	background: transparent;
-	border: 1px solid rgba(255,255,255,0.08);
-	color: var(--text);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text);
 }
+
+/* effet léger de déplacement quand on survole un bouton */
 .nav__links input[type="button"]:hover,
 .nav__links button:hover,
 .nav__links .btn:hover{
-	transform: translateY(-1px);
+    transform: translateY(-1px);
 }
 
-/* Theme toggle (checkbox styled as a pill switch) */
+/* =================== TOGGLE THEME (case à cocher stylisée) =================== */
+/* on supprime l'apparence native et on dessine un "pills" + un knob avec radial-gradient */
 .nav__links input[type="checkbox"] {
-	/* remove native appearance */
-	-webkit-appearance: none;
-	appearance: none;
+    /* enlever l'apparence native */
+    -webkit-appearance: none;
+    appearance: none;
 
-	/* size & layout */
-	width: 46px;
-	height: 26px;
-	border-radius: 999px;
-	border: 1px solid rgba(255,255,255,0.06);
-	background-color: rgba(255,255,255,0.06);
-	margin-left: 0.6rem;
-	cursor: pointer;
-	display: inline-block;
-	vertical-align: middle;
+    /* taille + forme */
+    width: 46px;
+    height: 26px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background-color: rgba(255,255,255,0.06);
+    margin-left: 0.6rem;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
 
-	/* track + knob (knob simulated with radial-gradient) */
-	background-color: var(--surface);
-	background-image: radial-gradient(circle at 6px 50%, #fff 9px, transparent 10px);
-	background-repeat: no-repeat;
-	background-position: 6px center;
-	transition: background-color 160ms ease, background-position 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
-	outline: none;
-	border: 1px solid var(--border);
+    /* track + knob (le knob est simulé par un radial-gradient) */
+    background-color: var(--surface);
+    background-image: radial-gradient(circle at 6px 50%, #fff 9px, transparent 10px);
+    background-repeat: no-repeat;
+    background-position: 6px center;
+    transition: background-color 160ms ease, background-position 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    outline: none;
+    border: 1px solid var(--border);
 }
 
-/* checked state - move knob to the right & colorize track */
+/* si la case est cochée: on déplace le knob et on colorise le track */
 .nav__links input[type="checkbox"]:checked {
-	background-color: var(--accent);
-	background-image: radial-gradient(circle at calc(100% - 6px) 50%, #fff 9px, transparent 10px);
-	border-color: color-mix(in srgb, var(--accent) 60%, transparent 40%);
+    background-color: var(--accent);
+    background-image: radial-gradient(circle at calc(100% - 6px) 50%, #fff 9px, transparent 10px);
+    border-color: color-mix(in srgb, var(--accent) 60%, transparent 40%);
 }
 
-/* focus / active states */
+/* focus: léger halo (très utile pour accessibilité/keyboard) */
 .nav__links input[type="checkbox"]:focus {
-	box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent 90%);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent 90%);
 }
 
-/* small layout tweaks to align toggle with links (already centered by .nav__links) */
+/* hover pour le toggle: petit effet de luminosité */
+.nav__links input[type="checkbox"]:hover {
+    filter: brightness(1.06);
+}
+
+/* =================== RÉPONSIVITÉ / MEDIA QUERIES =================== */
+/* pour écrans jusqu'à 768px: réduisons des padding, adaptons la barre d'outils */
 @media (max-width: 768px) {
-	.nav {
-		padding: 0.6rem 0.8rem;
-		gap: 0.5rem;
-	}
-	.nav__title { display: none; }
-	.nav__links {
-		gap: 0.5rem;
-		overflow-x: auto;
-	}
-	.nav__links input[type="search"] { width: 140px; }
-	.nav__links input[type="checkbox"] {
-		margin-left: 0.4rem;
-		width: 42px;
-		height: 24px;
-		background-image: radial-gradient(circle at 5px 50%, #fff 8.5px, transparent 9px);
-	}
+    .nav {
+        padding: 0.6rem 0.8rem;
+        gap: 0.5rem;
+    }
+    .nav__links {
+        gap: 0.5rem;
+        overflow-x: auto; /* permet de scroller horizontalement si trop de boutons */
+    }
+    .nav__links input[type="search"] { width: 140px; }
+    .nav__links input[type="checkbox"] {
+        margin-left: 0.4rem;
+        width: 42px;
+        height: 24px;
+        background-image: radial-gradient(circle at 5px 50%, #fff 8.5px, transparent 9px);
+    }
 }
 
-/* Very small screens: collapse further */
+/* écrans très petits: on réduit encore quelques éléments */
 @media (max-width: 420px) {
-	.nav__links input[type="search"] { width: 110px; }
-	.nav__logo img { height: 40px; }
-	.nav__links input[type="checkbox"] {
-		width: 38px;
-		height: 22px;
-		background-image: radial-gradient(circle at 5px 50%, #fff 7.5px, transparent 8px);
-	}
+    .nav__links input[type="search"] { width: 110px; }
+    .nav__logo img { height: 40px; }
+    .nav__links input[type="checkbox"] {
+        width: 38px;
+        height: 22px;
+        background-image: radial-gradient(circle at 5px 50%, #fff 7.5px, transparent 8px);
+    }
 }
 
-/* small utility spacing for main content */
+/* =================== UTILITAIRES =================== */
+/* conteneur principal pour centrer le contenu et limiter la largeur */
 .container { max-width: 1100px; margin: 1.2rem auto; padding: 0 1rem; }
 
-/* small visual polish when hovering the switch */
-.nav__links input[type="checkbox"]:hover {
-	filter: brightness(1.06);
-}
-
-/* s'il y a inversion ou filtre appliqué en fallback, ne pas l'appliquer en theme clair */
+/* en thème clair, on ne veut pas appliquer de filtre sur l'image du logo */
 .theme-light .nav__logo img {
-	filter: none;
+    filter: none;
 }
-
