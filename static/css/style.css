@@ -27,13 +27,12 @@
 }
 
 /* =================== RÉINITIALISATION / BASE =================== */
-/* box-sizing universel (utile pour ne pas soucier du calcul largeur) */
 * { box-sizing: border-box; }
 
 /* s'assurer que la page prend toute la hauteur */
 html, body { height: 100%; }
 
-/* styles de base du <body> (police, couleur, fond, interlignes) */
+/* styles de base du */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
@@ -43,7 +42,7 @@ body {
 }
 
 /* =================== NAVBAR =================== */
-/* barre principale en haut: sticky (reste en haut), flex pour aligner items */
+/* barre principale en haut */
 .nav {
     display: flex;
     align-items: center;
@@ -107,10 +106,8 @@ body {
 }
 
 /* =================== RECHERCHE ET BOUTONS DANS LA NAV =================== */
-/* conteneur pour la barre de recherche et boutons (alignés horizontalement) */
-.nav__search { display: flex; gap: 0.4rem; align-items: center; }
 
-/* champ de recherche: arrondi, fond et bord léger, largeur fixée */
+/* champ de recherche */
 .nav__search input[type="search"] {
     padding: 0.45rem 0.6rem;
     border-radius: 999px;
@@ -126,7 +123,7 @@ body {
     color: rgba(255,255,255,0.45);
 }
 
-/* boutons et inputs stylisés pour ressembler à des "pills" */
+/* boutons et inputs stylisés */
 .nav__links input[type="button"],
 .nav__links button,
 .nav__links .btn {
@@ -137,7 +134,7 @@ body {
     font-weight: 700;
 }
 
-/* bouton "Rechercher": fond sombre léger */
+/* bouton "Rechercher" */
 .nav__links button.btn--search,
 .nav__links .btn--search,
 .nav__links input[type="button"][value="Rechercher"] {
@@ -145,7 +142,7 @@ body {
     color: var(--text);
 }
 
-/* bouton "Se connecter": outline visible */
+/* bouton "Se connecter" */
 .nav__links button.btn--outline,
 .nav__links .btn--outline,
 .nav__links input[type="button"][value="Se connecter"] {
@@ -162,7 +159,6 @@ body {
 }
 
 /* =================== TOGGLE THEME (case à cocher stylisée) =================== */
-/* on supprime l'apparence native et on dessine un "pills" + un knob avec radial-gradient */
 .nav__links input[type="checkbox"] {
     /* enlever l'apparence native */
     -webkit-appearance: none;
@@ -179,7 +175,7 @@ body {
     display: inline-block;
     vertical-align: middle;
 
-    /* track + knob (le knob est simulé par un radial-gradient) */
+    /* track + knob */
     background-color: var(--surface);
     background-image: radial-gradient(circle at 6px 50%, #fff 9px, transparent 10px);
     background-repeat: no-repeat;
@@ -189,19 +185,19 @@ body {
     border: 1px solid var(--border);
 }
 
-/* si la case est cochée: on déplace le knob et on colorise le track */
+/* si la case est cochée */
 .nav__links input[type="checkbox"]:checked {
     background-color: var(--accent);
     background-image: radial-gradient(circle at calc(100% - 6px) 50%, #fff 9px, transparent 10px);
     border-color: color-mix(in srgb, var(--accent) 60%, transparent 40%);
 }
 
-/* focus: léger halo (très utile pour accessibilité/keyboard) */
+/* focus*/
 .nav__links input[type="checkbox"]:focus {
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent 90%);
 }
 
-/* hover pour le toggle: petit effet de luminosité */
+/* hover pour le toggle */
 .nav__links input[type="checkbox"]:hover {
     filter: brightness(1.06);
 }
@@ -238,7 +234,7 @@ body {
 }
 
 /* =================== UTILITAIRES =================== */
-/* conteneur principal pour centrer le contenu et limiter la largeur */
+/* conteneur principal */
 .container { max-width: 1100px; margin: 1.2rem auto; padding: 0 1rem; }
 
 /* en thème clair, on ne veut pas appliquer de filtre sur l'image du logo */
