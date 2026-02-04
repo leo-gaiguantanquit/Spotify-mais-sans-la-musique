@@ -13,3 +13,12 @@ type SpotifyPlaylist struct {
 		} `json:"items"`
 	} `json:"tracks"`
 }
+
+type SpotifySearchResponse struct {
+	Playlists struct {
+		Items []struct {
+			ID   string `json:"id"`
+			Name string `json:"name"`
+		} `json:"items"`
+	} `json:"playlists"`
+}

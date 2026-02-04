@@ -20,7 +20,7 @@ var (
 
 func InitSpotify() {
 	spotify_key, spotify_app = config.GetSpotifyKeyAndApp()
-	var err error // Changé 'any' en 'error' pour être plus standard
+	var err error
 	token.AccessToken, err = getAccessToken(spotify_app, spotify_key)
 	if err != nil {
 		utils.LogError("Erreur de la récupération du token", err)
@@ -35,7 +35,6 @@ type TokenResponse struct {
 }
 
 func getAccessToken(clientID, clientSecret string) (string, error) {
-	// 1. Utiliser l'URL officielle d'authentification
 	authURL := "https://accounts.spotify.com/api/token"
 
 	data := url.Values{}
@@ -43,17 +42,16 @@ func getAccessToken(clientID, clientSecret string) (string, error) {
 
 	req, err := http.NewRequest("POST", authURL, strings.NewReader(data.Encode()))
 	if err != nil {
-		return "", err
+		utils.LogError("", err)
 	}
 
-	// L'authentification Basic doit être faite avec le ClientID et ClientSecret
 	req.SetBasicAuth(clientID, clientSecret)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", err
+		utils.LogError("", err)
 	}
 	defer resp.Body.Close()
 
@@ -67,60 +65,64 @@ func getAccessToken(clientID, clientSecret string) (string, error) {
 
 	var tokenRes TokenResponse
 	if err := json.NewDecoder(resp.Body).Decode(&tokenRes); err != nil {
-		return "", err
+		utils.LogError("Décodage du token", err)
 	}
 	return tokenRes.AccessToken, nil
 }
 
 func GetTopArtist() {
-	fmt.Printf("DEBUG: Starting GetTopArtist function\n")
-	playlistID := "37i9dQZEVXbKQ1ogMOyW9N"
-	fmt.Printf("DEBUG: Playlist ID set to: %s\n", playlistID)
+	utils.Debug("Starting GetTopArtist function")
+	// ID de la playlist Top 50 France
+	playlistID := "2IgPkhcHbgQ4s4PdCxljAx"
+	utils.Debug(fmt.Sprintf("DEBUG: Playlist ID set to: '%s'", playlistID))
 
-	// 2. Utiliser l'URL officielle de l'API v1
-	apiURL := fmt.Sprintf("https://api.spotify.com/v1/playlists/%s", playlistID)
-	fmt.Printf("DEBUG: Constructed API URL: %s\n", apiURL)
+	// Ajout du paramètre fields pour optimiser et market pour éviter les 404 sur les playlists officielles
+	apiURL := fmt.Sprintf("https://api.spotify.com/v1/playlists/%s?market=FR&fields=name,tracks.items(track(name,artists(name)))", playlistID)
+	utils.Debug(fmt.Sprintf("DEBUG: Constructed API URL: %s", apiURL))
 
-	fmt.Printf("Fetching top artists from playlist %s...\n", playlistID)
+	utils.Debug(fmt.Sprintf("Fetching top artists from playlist %s...", playlistID))
 
-	req, _ := http.NewRequest("GET", apiURL, nil)
-	fmt.Printf("DEBUG: Created HTTP GET request to: %s\n", apiURL)
+	req, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		utils.LogError("Erreur création requête", err)
+		return
+	}
+	utils.Debug(fmt.Sprintf("DEBUG: Created HTTP GET request to: %s", apiURL))
 	req.Header.Add("Authorization", "Bearer "+token.AccessToken)
-	fmt.Printf("DEBUG: Added Authorization header with Bearer token\n")
+	utils.Debug("DEBUG: Added Authorization header with Bearer token")
 
 	client := &http.Client{Timeout: 10 * time.Second}
-	fmt.Printf("DEBUG: Created HTTP client with 10s timeout\n")
+	utils.Debug("DEBUG: Created HTTP client with 10s timeout")
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Printf("DEBUG: HTTP request failed with error: %v\n", err)
 		utils.LogError("Erreur requête HTTP", err)
 		return
 	}
-	fmt.Printf("DEBUG: HTTP request completed successfully\n")
+	utils.Debug("DEBUG: HTTP request completed successfully")
 	defer resp.Body.Close()
-	fmt.Printf("DEBUG: Response body will be closed on function exit\n")
+	utils.Debug("DEBUG: Response body will be closed on function exit")
 
 	// Vérification du code HTTP
-	fmt.Printf("DEBUG: Response status code: %d\n", resp.StatusCode)
+	utils.Debug(fmt.Sprintf("DEBUG: Response status code: %d\n", resp.StatusCode))
 	if resp.StatusCode != http.StatusOK {
-		fmt.Printf("DEBUG: Non-OK status code received: %d\n", resp.StatusCode)
-		fmt.Printf("Erreur API Spotify ! Code: %d\n", resp.StatusCode)
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		utils.Debug(fmt.Sprintf("DEBUG: Non-OK status code received: %d. Body: %s\n", resp.StatusCode, string(bodyBytes)))
+		utils.Debug(fmt.Sprintf("Erreur API Spotify ! Code: %d\n", resp.StatusCode))
 		return
 	}
-	fmt.Printf("DEBUG: Status code is OK (200)\n")
+	utils.Debug("DEBUG: Status code is OK (200)")
 
 	var result SpotifyPlaylist
-	fmt.Printf("DEBUG: Starting JSON decoding into SpotifyPlaylist struct\n")
+	utils.Debug("DEBUG: Starting JSON decoding into SpotifyPlaylist struct")
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		fmt.Printf("DEBUG: JSON decoding failed with error: %v\n", err)
 		utils.LogError("Erreur décodage JSON", err)
 		return
 	}
-	fmt.Printf("DEBUG: JSON decoding completed successfully\n")
+	utils.Debug("DEBUG: JSON decoding completed successfully")
 
-	fmt.Printf("Successfully decoded playlist: %s\n", result)
-	fmt.Printf("DEBUG: Playlist name: %s\n", result.Name)
-	fmt.Printf("DEBUG: Number of tracks: %d\n", len(result.Tracks.Items))
+	utils.Debug(fmt.Sprintf("Successfully decoded playlist: %s\n", result))
+	utils.Debug(fmt.Sprintf("DEBUG: Playlist name: %s\n", result.Name))
+	utils.Debug(fmt.Sprintf("DEBUG: Number of tracks: %d\n", len(result.Tracks.Items)))
 
 	// artistesUniques := make(map[string]bool)
 	// fmt.Printf("DEBUG: Initialized map for unique artists\n")
@@ -148,5 +150,5 @@ func GetTopArtist() {
 
 	// fmt.Printf("Total unique artists found: %d\n", len(artistesUniques))
 	// fmt.Printf("DEBUG: Finished processing all tracks\n")
-	fmt.Printf("DEBUG: End of GetTopArtist function\n")
+	utils.Debug("DEBUG: End of GetTopArtist function")
 }
