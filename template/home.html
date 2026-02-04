@@ -1,0 +1,176 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    /* Styles personnalisés pour masquer la barre de défilement tout en gardant le scroll */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    /* Animation pour le défilement doux */
+    @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    .animate-scroll {
+        animation: scroll 200s linear infinite;
+    }
+    /* Pause l'animation au survol */
+    .animate-scroll:hover {
+        animation-play-state: paused;
+    }
+</style>
+
+<main class="bg-[#121212] text-white font-sans min-h-screen pb-20 overflow-x-hidden selection:bg-green-500 selection:text-black">
+
+    <section class="pt-10 pb-16 relative">
+        <h2 class="text-2xl font-bold mb-6 px-8 tracking-tighter">Top Titres France <span class="text-green-500 text-sm font-normal uppercase tracking-widest ml-2">En Tendance</span></h2>
+        
+        <div class="absolute top-24 left-0 w-24 h-64 bg-gradient-to-r from-[#121212] to-transparent z-20 pointer-events-none"></div>
+        <div class="absolute top-24 right-0 w-24 h-64 bg-gradient-to-l from-[#121212] to-transparent z-20 pointer-events-none"></div>
+
+        <div class="relative w-full overflow-hidden group">
+            <div class="flex w-max animate-scroll hover:cursor-pointer gap-8 px-8">
+                
+                {{.TopArtist_list}}
+            </div>
+        </div>
+    </section>
+
+    <section class="px-8 mb-24">
+        <h2 class="text-2xl font-bold mb-6">Artiste du Moment</h2>
+        
+        <div class="relative w-full rounded-3xl overflow-hidden bg-neutral-800 shadow-2xl h-[500px] flex items-end md:items-center">
+            
+            <div class="absolute inset-0">
+                <img src="{{.PP_mom_url}}" class="w-full h-full object-cover opacity-60 mix-blend-overlay hover:scale-105 transition-transform duration-[2000ms]" alt="Background Artist">
+                <div class="absolute inset-0 bg-gradient-to-r from-black via-[#181818]/80 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 p-8 md:p-12 w-full md:w-1/2 flex flex-col justify-center h-full">
+                <div class="mb-6">
+                    <span class="bg-green-500 text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">#1 Mondial</span>
+                    <h1 class="text-5xl md:text-7xl font-black mt-4 mb-2 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">{{.TopArtist_name}}</h1>
+                    <p class="text-gray-300 text-lg italic">{{.TopArtist_desc}}</p>
+                </div>
+
+                <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg">
+                    <h4 class="text-xs uppercase text-gray-400 font-bold mb-4 tracking-wider">Top Titres</h4>
+                    <ul class="space-y-3">
+                        <li class="flex justify-between items-center group cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <span class="text-green-500 font-mono">01</span>
+                                <span class="group-hover:text-green-400 transition-colors">{{.TopArtist_track01_name}}</span>
+                            </div>
+                            <span class="text-gray-500 text-sm">{{.TopArtist_track01_time}}</span>
+                        </li>
+                        <li class="flex justify-between items-center group cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <span class="text-white font-mono">02</span>
+                                <span class="group-hover:text-green-400 transition-colors">{{.TopArtist_track02_name}}</span>
+                            </div>
+                            <span class="text-gray-500 text-sm">{{.TopArtist_track02_time}}</span>
+                        </li>
+                        <li class="flex justify-between items-center group cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <span class="text-white font-mono">03</span>
+                                <span class="group-hover:text-green-400 transition-colors">{{.TopArtist_track03_name}}</span>
+                            </div>
+                            <span class="text-gray-500 text-sm">{{.TopArtist_track03_time}}</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mt-8 flex gap-4">
+                     <button class="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full transition-transform hover:scale-105">Découvrire +</button>
+                     <button class="border border-gray-500 hover:border-white text-white font-bold py-3 px-8 rounded-full transition-colors">Suivre sur Spotify</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-8 mb-24">
+        <h2 class="text-2xl font-bold mb-6">Artiste Prometteur</h2>
+        
+        <div class="relative w-full rounded-3xl overflow-hidden bg-neutral-800 shadow-2xl h-[500px] flex items-end md:items-center justify-end">
+            
+            <div class="absolute inset-0">
+                <img src="{{.PP_prom_url}}" class="w-full h-full object-cover opacity-60 mix-blend-hard-light hover:scale-105 transition-transform duration-[2000ms]" alt="Background Artist">
+                <div class="absolute inset-0 bg-gradient-to-l from-black via-[#181818]/90 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 p-8 md:p-12 w-full md:w-1/2 flex flex-col justify-center h-full text-right">
+                <div class="mb-6 flex flex-col items-end">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Découverte</span>
+                    <h1 class="text-5xl md:text-7xl font-black mt-4 mb-2 tracking-tighter text-transparent bg-clip-text bg-gradient-to-l from-white to-gray-400">{{.PromArtist_name}}</h1>
+                    <p class="text-gray-300 text-lg italic">{{.PromArtist_desc}}</p>
+                </div>
+
+                <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg ml-auto w-full">
+                    <h4 class="text-xs uppercase text-gray-400 font-bold mb-4 tracking-wider">Titres Phares</h4>
+                    <ul class="space-y-3">
+                        <li class="flex justify-between items-center group cursor-pointer flex-row-reverse">
+                            <div class="flex items-center gap-3 flex-row-reverse">
+                                <span class="text-blue-500 font-mono">01</span>
+                                <span class="group-hover:text-blue-400 transition-colors">{{.PromArtist_track01_name}}</span>
+                            </div>
+                            <span class="text-gray-500 text-sm">{{.PromArtist_track01_time}}</span>
+                        </li>
+                        <li class="flex justify-between items-center group cursor-pointer flex-row-reverse">
+                            <div class="flex items-center gap-3 flex-row-reverse">
+                                <span class="text-white font-mono">02</span>
+                                <span class="group-hover:text-blue-400 transition-colors">{{.PromArtist_track02_name}}</span>
+                            </div>
+                            <span class="text-gray-500 text-sm">{{.PromArtist_track02_time}}</span>
+                        </li>
+                        <li class="flex justify-between items-center group cursor-pointer flex-row-reverse">
+                            <div class="flex items-center gap-3 flex-row-reverse">
+                                <span class="text-white font-mono">03</span>
+                                <span class="group-hover:text-blue-400 transition-colors">{{.PromArtist_track03_name}}</span>
+                            </div>
+                            <span class="text-gray-500 text-sm">{{.PromArtist_track03_time}}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                 <div class="mt-8 flex gap-4 justify-end">
+                     <button class="border border-gray-500 hover:border-white text-white font-bold py-3 px-8 rounded-full transition-colors">Découvrire +</button>
+                     <button class="bg-white hover:bg-gray-200 text-black font-bold py-3 px-8 rounded-full transition-transform hover:scale-105">Suivre sur Spotify</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-8 pb-20">
+        <h2 class="text-2xl font-bold mb-6">Parcourir les Ambiances</h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="group relative h-48 rounded-xl overflow-hidden cursor-pointer">
+                <div class="absolute inset-0 bg-pink-600 transition-colors group-hover:bg-pink-500"></div>
+                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=400&auto=format&fit=crop" class="absolute right-[-20px] bottom-[-20px] w-24 h-24 rotate-[25deg] shadow-xl group-hover:scale-110 group-hover:rotate-[30deg] transition-all duration-300" alt="Icon">
+                <span class="absolute top-4 left-4 font-bold text-xl">Lofi<br>Visuel</span>
+            </div>
+
+            <div class="group relative h-48 rounded-xl overflow-hidden cursor-pointer">
+                <div class="absolute inset-0 bg-indigo-600 transition-colors group-hover:bg-indigo-500"></div>
+                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400&auto=format&fit=crop" class="absolute right-[-20px] bottom-[-20px] w-24 h-24 rotate-[25deg] shadow-xl group-hover:scale-110 group-hover:rotate-[30deg] transition-all duration-300" alt="Icon">
+                <span class="absolute top-4 left-4 font-bold text-xl">Texture<br>Brute</span>
+            </div>
+
+            <div class="group relative h-48 rounded-xl overflow-hidden cursor-pointer">
+                <div class="absolute inset-0 bg-orange-700 transition-colors group-hover:bg-orange-600"></div>
+                <img src="https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=400&auto=format&fit=crop" class="absolute right-[-20px] bottom-[-20px] w-24 h-24 rotate-[25deg] shadow-xl group-hover:scale-110 group-hover:rotate-[30deg] transition-all duration-300" alt="Icon">
+                <span class="absolute top-4 left-4 font-bold text-xl">Pluie<br>& Orage</span>
+            </div>
+
+            <div class="group relative h-48 rounded-xl overflow-hidden cursor-pointer">
+                <div class="absolute inset-0 bg-teal-800 transition-colors group-hover:bg-teal-700"></div>
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=400&auto=format&fit=crop" class="absolute right-[-20px] bottom-[-20px] w-24 h-24 rotate-[25deg] shadow-xl group-hover:scale-110 group-hover:rotate-[30deg] transition-all duration-300" alt="Icon">
+                <span class="absolute top-4 left-4 font-bold text-xl">Espace<br>Profond</span>
+            </div>
+        </div>
+    </section>
+
+</main>
