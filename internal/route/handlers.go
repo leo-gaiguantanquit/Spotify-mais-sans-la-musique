@@ -9,7 +9,7 @@ import (
 func Launch() {
 	http.HandleFunc("/", home)
 
-	fs := http.FileServer(http.Dir("assets"))
+	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	utils.Log("Server started at : http://localhost:8080")

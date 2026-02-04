@@ -1,1 +1,23 @@
-<navbar class="nav"> </navbar>
+<head>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__logo">
+        <a href="/"><img src="../static/img/LightLogo.png" alt="Logo" id="nav__logo"></a>
+    </div>
+    <ul class="nav__links">
+        <li><a href="/home">Accueil</a></li>
+        <li><a href="/artiste">Artistes</a></li>
+        <li><a href="/concert">Concerts</a></li>
+        <li class="nav__item nav__search">
+            <form action="/search" method="get" class="nav__search" role="search">
+                <input type="search" name="q" placeholder="Chercher un artiste ou un concert..." aria-label="Rechercher">
+                <button type="submit" class="btn btn--search">Rechercher</button>
+            </form>
+        </li>
+        <li><a class="btn btn--outline" href="/login">Se connecter</a></li>
+        <input type ="checkbox" id="Dark theme" ></input>
+    </ul>
+</nav>
+<script src="/static/js/theme-toggle.js" defer></script>
