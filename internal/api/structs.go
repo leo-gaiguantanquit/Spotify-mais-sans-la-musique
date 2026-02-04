@@ -1,12 +1,15 @@
 package api
 
 type SpotifyPlaylist struct {
-	Items []struct {
-		Track struct {
-			Artists []struct {
-				Name string
-			}
-			Name string
-		}
-	}
+	Name   string `json:"name"`
+	Tracks struct {
+		Items []struct {
+			Track struct {
+				Name    string `json:"name"`
+				Artists []struct {
+					Name string `json:"name"`
+				} `json:"artists"`
+			} `json:"track"`
+		} `json:"items"`
+	} `json:"tracks"`
 }

@@ -8,6 +8,6 @@ import (
 
 func main() {
 	config.InitConfig()
-	api.Launch()
+	api.InitSpotify()
 	route.Launch()
 }
