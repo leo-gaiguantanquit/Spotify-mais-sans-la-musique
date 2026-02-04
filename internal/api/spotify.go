@@ -27,7 +27,7 @@ func InitSpotify() {
 		return
 	}
 
-	GetTopArtist()
+	// GetTopArtist()  <-- removed call
 }
 
 type TokenResponse struct {
@@ -70,85 +70,127 @@ func getAccessToken(clientID, clientSecret string) (string, error) {
 	return tokenRes.AccessToken, nil
 }
 
-func GetTopArtist() {
+func GetTopArtist() (*SpotifyPlaylist, error) {
 	utils.Debug("Starting GetTopArtist function")
 	// ID de la playlist Top 50 France
 	playlistID := "2IgPkhcHbgQ4s4PdCxljAx"
 	utils.Debug(fmt.Sprintf("DEBUG: Playlist ID set to: '%s'", playlistID))
 
 	// Ajout du paramètre fields pour optimiser et market pour éviter les 404 sur les playlists officielles
-	apiURL := fmt.Sprintf("https://api.spotify.com/v1/playlists/%s?market=FR&fields=name,tracks.items(track(name,artists(name)))", playlistID)
+	apiURL := fmt.Sprintf("https://api.spotify.com/v1/playlists/%s?market=FR&fields=name,tracks.items(track(name,artists(name),album(images(url))))", playlistID)
 	utils.Debug(fmt.Sprintf("DEBUG: Constructed API URL: %s", apiURL))
 
 	utils.Debug(fmt.Sprintf("Fetching top artists from playlist %s...", playlistID))
 
 	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		utils.LogError("Erreur création requête", err)
-		return
+		utils.LogError("Erreur création requête Playlist", err)
+		return nil, err
 	}
-	utils.Debug(fmt.Sprintf("DEBUG: Created HTTP GET request to: %s", apiURL))
 	req.Header.Add("Authorization", "Bearer "+token.AccessToken)
-	utils.Debug("DEBUG: Added Authorization header with Bearer token")
 
 	client := &http.Client{Timeout: 10 * time.Second}
-	utils.Debug("DEBUG: Created HTTP client with 10s timeout")
 	resp, err := client.Do(req)
 	if err != nil {
-		utils.LogError("Erreur requête HTTP", err)
-		return
+		utils.LogError("Erreur requête HTTP Playlist", err)
+		return nil, err
 	}
-	utils.Debug("DEBUG: HTTP request completed successfully")
 	defer resp.Body.Close()
-	utils.Debug("DEBUG: Response body will be closed on function exit")
 
-	// Vérification du code HTTP
-	utils.Debug(fmt.Sprintf("DEBUG: Response status code: %d\n", resp.StatusCode))
 	if resp.StatusCode != http.StatusOK {
 		bodyBytes, _ := io.ReadAll(resp.Body)
 		utils.Debug(fmt.Sprintf("DEBUG: Non-OK status code received: %d. Body: %s\n", resp.StatusCode, string(bodyBytes)))
-		utils.Debug(fmt.Sprintf("Erreur API Spotify ! Code: %d\n", resp.StatusCode))
-		return
+		return nil, fmt.Errorf("playlist api error: %d", resp.StatusCode)
 	}
-	utils.Debug("DEBUG: Status code is OK (200)")
 
 	var result SpotifyPlaylist
-	utils.Debug("DEBUG: Starting JSON decoding into SpotifyPlaylist struct")
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		utils.LogError("Erreur décodage JSON", err)
-		return
+		return nil, err
 	}
-	utils.Debug("DEBUG: JSON decoding completed successfully")
 
-	utils.Debug(fmt.Sprintf("Successfully decoded playlist: %s\n", result))
-	utils.Debug(fmt.Sprintf("DEBUG: Playlist name: %s\n", result.Name))
-	utils.Debug(fmt.Sprintf("DEBUG: Number of tracks: %d\n", len(result.Tracks.Items)))
+	utils.Debug(fmt.Sprintf("Successfully decoded playlist: %s\n", result.Name))
 
-	// artistesUniques := make(map[string]bool)
-	// fmt.Printf("DEBUG: Initialized map for unique artists\n")
+	return &result, nil
+}
 
-	// // Notez le chemin d'accès : result -> Tracks -> Items
-	// for i, item := range result.Tracks.Items {
-	// 	fmt.Printf("DEBUG: Processing track item %d\n", i)
-	// 	trackName := item.Track.Name
-	// 	fmt.Printf("DEBUG: Track name: %s\n", trackName)
-	// 	for j, artist := range item.Track.Artists {
-	// 		fmt.Printf("DEBUG: Processing artist %d for track: %s\n", j, artist.Name)
-	// 		// Affichage pour debug
-	// 		// fmt.Printf("Artiste : %s (Titre : %s)\n", artist.Name, trackName)
+func GetArtist(artisteID string) (*SpotifyArtist, error) {
+	utils.Debug("Starting GetArtist function")
+	utils.Debug(fmt.Sprintf("DEBUG: Artiste ID set to: '%s'", artisteID))
 
-	// 		if !artistesUniques[artist.Name] {
-	// 			fmt.Printf("DEBUG: New unique artist found: %s\n", artist.Name)
-	// 			artistesUniques[artist.Name] = true
-	// 			// On peut afficher ici les artistes uniques trouvés
-	// 			fmt.Println("- " + artist.Name + " (" + trackName + ")")
-	// 		} else {
-	// 			fmt.Printf("DEBUG: Artist %s already in unique list\n", artist.Name)
-	// 		}
-	// 	}
-	// }
+	// Ajout du paramètre fields pour optimiser et market pour éviter les 404 sur les playlists officielles
+	apiURL := fmt.Sprintf("https://api.spotify.com/v1/artists/%s", artisteID)
+	utils.Debug(fmt.Sprintf("DEBUG: Constructed API URL: %s", apiURL))
 
-	// fmt.Printf("Total unique artists found: %d\n", len(artistesUniques))
-	// fmt.Printf("DEBUG: Finished processing all tracks\n")
-	utils.Debug("DEBUG: End of GetTopArtist function")
+	utils.Debug(fmt.Sprintf("Fetching data from artiste %s...", artisteID))
+
+	req, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		utils.LogError("Erreur création requête Artiste", err)
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+token.AccessToken)
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		utils.LogError("Erreur requête HTTP Artiste", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		utils.Debug(fmt.Sprintf("DEBUG: Non-OK status code received: %d. Body: %s\n", resp.StatusCode, string(bodyBytes)))
+		return nil, fmt.Errorf("artiste api error: %d", resp.StatusCode)
+	}
+
+	var result SpotifyArtist
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		utils.LogError("Erreur décodage JSON", err)
+		return nil, err
+	}
+
+	utils.Debug(fmt.Sprintf("Successfully decoded artiste: %s\n", result.Name))
+
+	return &result, nil
+}
+
+func GetArtistTopTrack(artisteID string) (*SpotifyArtistTopTracks, error) {
+	utils.Debug("Starting GetArtistTopTrack function")
+
+	// API URL pour récupérer les top tracks d'un artiste (market=FR est obligatoire ou recommandé)
+	apiURL := fmt.Sprintf("https://api.spotify.com/v1/artists/%s/top-tracks?market=FR", artisteID)
+	utils.Debug(fmt.Sprintf("DEBUG: Constructed API URL: %s", apiURL))
+
+	req, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		utils.LogError("Erreur création requête Artiste Top Tracks", err)
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+token.AccessToken)
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		utils.LogError("Erreur requête HTTP Artiste Top Tracks", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		utils.Debug(fmt.Sprintf("DEBUG: Non-OK status code received: %d. Body: %s\n", resp.StatusCode, string(bodyBytes)))
+		return nil, fmt.Errorf("artiste top tracks api error: %d", resp.StatusCode)
+	}
+
+	var result SpotifyArtistTopTracks
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		utils.LogError("Erreur décodage JSON Top Tracks", err)
+		return nil, err
+	}
+
+	utils.Debug(fmt.Sprintf("Successfully decoded %d tracks for artist %s\n", len(result.Tracks), artisteID))
+
+	return &result, nil
 }
