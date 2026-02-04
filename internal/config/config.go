@@ -6,12 +6,11 @@ import (
 	"os"
 )
 
-var (
-	cfg Config
-)
+var cfg Config
 
 type Config struct {
-	API ConfigAPI
+	API   ConfigAPI
+	DEBUG bool
 }
 
 type ConfigAPI struct {
@@ -35,8 +34,13 @@ func InitConfig() {
 	}
 
 	utils.Log("Configs initialisés avec succée")
+	utils.SetDebugMode(GetDebug())
 }
 
 func GetSpotifyKeyAndApp() (string, string) {
 	return cfg.API.Spotify_key, cfg.API.Spotify_app
+}
+
+func GetDebug() bool {
+	return cfg.DEBUG
 }
