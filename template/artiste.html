@@ -1,0 +1,34 @@
+<main>
+    <section>
+        <div>
+            <img src="{{.Artist_img_url}}" alt="Photo de {{.Artist_name}}">
+        </div>
+        <div>
+            <h1>{{.Artist_name}}</h1>
+            <p>{{.Artist_desc}}</p>
+            <button>Suivre sur Spotify</button>
+        </div>
+    </section>
+
+    <section>
+        <h2>Biographie</h2>
+        <div>
+            {{.Artist_bio}}
+        </div>
+    </section>
+
+    <section>
+        <h2>Top Titres</h2>
+        <ul>
+            {{range .Artist_top_tracks}}
+            <li>
+                <div>
+                    <span>{{.Rank}}</span>
+                    <span>{{.Title}}</span>
+                </div>
+                <span>{{.Duration}}</span>
+            </li>
+            {{end}}
+        </ul>
+    </section>
+</main>
