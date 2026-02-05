@@ -19,6 +19,7 @@ type PageData struct {
 
 func home(w http.ResponseWriter, r *http.Request) {
 	topArtistID := "5y239Fviw0hAOe5Jy3qzlf"
+	promArtistID := "2pGLZYyPlXH1rkOsxRdZ0h"
 
 	utils.Log("Page Home ouverte")
 
@@ -31,8 +32,19 @@ func home(w http.ResponseWriter, r *http.Request) {
 		utils.LogError("Erreur api spotify", err)
 	}
 	topArtisteTrack, err := api.GetArtistTopTrack(topArtistID)
-	// utils.Debug(fmt.Sprintf("%v", playlist))
-	// utils.Debug(fmt.Sprintf("%v", topArtiste))
+	if err != nil {
+		utils.LogError("Erreur api spotify", err)
+	}
+
+	promArtiste, err := api.GetArtist(promArtistID)
+	if err != nil {
+		utils.LogError("Erreur api spotify", err)
+	}
+	promArtisteTrack, err := api.GetArtistTopTrack(promArtistID)
+	if err != nil {
+		utils.LogError("Erreur api spotify", err)
+	}
+
 	tracksHTML := ""
 
 	if err != nil {
@@ -70,7 +82,18 @@ func home(w http.ResponseWriter, r *http.Request) {
 		TopArtist_track02_time: utils.MsToTime(topArtisteTrack.Tracks[1].Duration),
 		TopArtist_track03_name: topArtisteTrack.Tracks[2].Name,
 		TopArtist_track03_time: utils.MsToTime(topArtisteTrack.Tracks[2].Duration),
-		PP_prom_url:            "https://i.scdn.co/image/ab67616d0000b273bf75176711956555132dd0e2",
+		TopArtistURL:           topArtiste.ExternalURLs.Spotify,
+
+		PP_prom_url:             promArtiste.Images[0].URL,
+		PromArtist_name:         promArtiste.Name,
+		PromArtist_desc:         strings.Join(promArtiste.Genres, " - "),
+		PromArtist_track01_name: promArtisteTrack.Tracks[0].Name,
+		PromArtist_track01_time: utils.MsToTime(promArtisteTrack.Tracks[0].Duration),
+		PromArtist_track02_name: promArtisteTrack.Tracks[1].Name,
+		PromArtist_track02_time: utils.MsToTime(promArtisteTrack.Tracks[1].Duration),
+		PromArtist_track03_name: promArtisteTrack.Tracks[2].Name,
+		PromArtist_track03_time: utils.MsToTime(promArtisteTrack.Tracks[2].Duration),
+		PromArtistURL:           promArtiste.ExternalURLs.Spotify,
 	}
 
 	renderFile("Accueil", render("home", data), w)

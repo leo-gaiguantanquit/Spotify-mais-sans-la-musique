@@ -32,7 +32,7 @@
         <div class="absolute top-24 right-0 w-24 h-64 bg-gradient-to-l from-[#121212] to-transparent z-20 pointer-events-none"></div>
 
         <div class="relative w-full overflow-hidden group">
-            <div class="flex w-max animate-scroll hover:cursor-pointer gap-8 px-8">
+            <div class="flex w-max animate-scroll hover:cursor-pointer gap-8 px-8 py-6">
                 
                 {{.TopTitre_list}}
             </div>
@@ -84,8 +84,8 @@
                 </div>
                 
                 <div class="mt-8 flex gap-4">
-                     <button class="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full transition-transform hover:scale-105">Découvrire +</button>
-                     <button class="border border-gray-500 hover:border-white text-white font-bold py-3 px-8 rounded-full transition-colors">Suivre sur Spotify</button>
+                     <a class="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full transition-transform hover:scale-105">Découvrire +</a>
+                     <a class="border border-gray-500 hover:border-white text-white font-bold py-3 px-8 rounded-full transition-colors" href="{{.TopArtistURL}}" target="_blank">Suivre sur Spotify</a>
                 </div>
             </div>
         </div>
@@ -136,8 +136,8 @@
                 </div>
 
                  <div class="mt-8 flex gap-4 justify-end">
-                     <button class="border border-gray-500 hover:border-white text-white font-bold py-3 px-8 rounded-full transition-colors">Découvrire +</button>
-                     <button class="bg-white hover:bg-gray-200 text-black font-bold py-3 px-8 rounded-full transition-transform hover:scale-105">Suivre sur Spotify</button>
+                     <a class="border border-gray-500 hover:border-white text-white font-bold py-3 px-8 rounded-full transition-colors" href="{{.PromArtistURL}}" target="_blank">Suivre sur Spotify</a>
+                     <a class="bg-white hover:bg-gray-200 text-black font-bold py-3 px-8 rounded-full transition-transform hover:scale-105" >Découvrire +</a>
                 </div>
             </div>
         </div>
