@@ -237,6 +237,27 @@ body {
 /* conteneur principal */
 .container { max-width: 1100px; margin: 1.2rem auto; padding: 0 1rem; }
 
+/* Classe utilitaire pour appliquer automatiquement les couleurs du thème (fond et texte) au contenu principal */
+.app-main {
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Fond secondaire pour les blocs (remplace bg-neutral-800) */
+.bg-surface {
+    background: var(--surface);
+}
+
+/* Texte principal (remplace text-white) */
+.text-main {
+    color: var(--text);
+}
+
+/* Texte atténué (remplace text-gray-300) */
+.text-muted {
+    color: var(--muted);
+}
+
 /* en thème clair, on ne veut pas appliquer de filtre sur l'image du logo */
 .theme-light .nav__logo img {
     filter: none;
