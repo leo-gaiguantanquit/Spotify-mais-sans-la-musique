@@ -1,0 +1,13 @@
+<main class="app-main min-h-screen py-16 px-8">
+  <h1 class="text-3xl md:text-5xl font-bold text-main mb-10 text-center">Artistes</h1>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    {{range .Artistes}}
+    <div class="bg-surface rounded-2xl shadow-xl p-6 flex flex-col items-center gap-4">
+      <img src="{{.Image}}" alt="Photo de {{.Nom}}" class="w-32 h-32 rounded-full object-cover mb-2">
+      <h2 class="text-xl font-bold text-main">{{.Nom}}</h2>
+      <p class="text-muted text-sm mb-2">{{.Genre}}</p>
+      <a href="/artiste?id={{.ID}}" class="bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-6 rounded-full transition-transform hover:scale-105">Voir</a>
+    </div>
+    {{end}}
+  </div>
+</main>
