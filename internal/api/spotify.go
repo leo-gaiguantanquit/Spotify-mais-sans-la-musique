@@ -194,3 +194,44 @@ func GetArtistTopTrack(artisteID string) (*SpotifyArtistTopTracks, error) {
 
 	return &result, nil
 }
+
+func Search(query string) (*SpotifySearchResponse, error) {
+	utils.Debug("Starting Search function")
+
+	// Encodage de la requête pour l'URL
+	encodedQuery := url.QueryEscape(query)
+	// On recherche Artistes et Tracks
+	resultType := "artist,track"
+
+	apiURL := fmt.Sprintf("https://api.spotify.com/v1/search?q=%s&type=%s&market=FR&limit=10", encodedQuery, resultType)
+	utils.Debug(fmt.Sprintf("DEBUG: Constructed API URL: %s", apiURL))
+
+	req, err := http.NewRequest("GET", apiURL, nil)
+	if err != nil {
+		utils.LogError("Erreur création requête Search", err)
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+token.AccessToken)
+
+	client := &http.Client{Timeout: 30 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		utils.LogError("Erreur requête HTTP Search", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		utils.Debug(fmt.Sprintf("DEBUG: Non-OK status code received: %d. Body: %s\n", resp.StatusCode, string(bodyBytes)))
+		return nil, fmt.Errorf("search api error: %d", resp.StatusCode)
+	}
+
+	var result SpotifySearchResponse
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		utils.LogError("Erreur décodage JSON Search", err)
+		return nil, err
+	}
+
+	return &result, nil
+}

@@ -62,4 +62,21 @@ type SpotifySearchResponse struct {
 			Name string `json:"name"`
 		} `json:"items"`
 	} `json:"playlists"`
+	Artists struct {
+		Items []SpotifyArtist `json:"items"`
+	} `json:"artists"`
+	Tracks struct {
+		Items []struct {
+			ID      string `json:"id"`
+			Name    string `json:"name"`
+			Artists []struct {
+				Name string `json:"name"`
+			} `json:"artists"`
+			Album struct {
+				Images []struct {
+					URL string `json:"url"`
+				} `json:"images"`
+			} `json:"album"`
+		} `json:"items"`
+	} `json:"tracks"`
 }
