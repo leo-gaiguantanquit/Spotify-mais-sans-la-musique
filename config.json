@@ -1,7 +1,8 @@
 {
     "API": {
         "Spotify_key": "bccbca1c17144f3497deaa2274db8db5",
-        "Spotify_app": "02f6479f33af44ab99aac8309dd94562"
+        "Spotify_app": "02f6479f33af44ab99aac8309dd94562",
+        "Ticketmaster_key": "5qetG1qaLM2FNGUReIrTm2kZ4Gv2OOzr"
     },
     "DEBUG": true
 }
