@@ -14,8 +14,9 @@ type Config struct {
 }
 
 type ConfigAPI struct {
-	Spotify_key string
-	Spotify_app string
+	Spotify_key      string
+	Spotify_app      string
+	Ticketmaster_key string
 }
 
 func InitConfig() {
@@ -39,6 +40,10 @@ func InitConfig() {
 
 func GetSpotifyKeyAndApp() (string, string) {
 	return cfg.API.Spotify_key, cfg.API.Spotify_app
+}
+
+func GetTicketmasterKey() string {
+	return cfg.API.Ticketmaster_key
 }
 
 func GetDebug() bool {
