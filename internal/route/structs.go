@@ -26,3 +26,43 @@ type HomeData struct {
 	PromArtist_track03_name string
 	PromArtist_track03_time string
 }
+
+type TrackData struct {
+	Rank     int
+	Title    string
+	Duration string
+}
+
+type ConcertData struct {
+	Name      string
+	Date      string
+	City      string
+	Venue     string
+	TicketUrl string
+	Lat       string
+	Lng       string
+}
+
+type ArtistData struct {
+	Artist_img_url    string
+	Artist_name       string
+	Artist_desc       string
+	Artist_bio        template.HTML
+	Artist_top_tracks []TrackData
+	Artist_concerts   []ConcertData
+}
+
+type ArtistListItem struct {
+	Image string
+	Nom   string
+	Genre string
+	ID    string
+}
+
+type ArtistListData struct {
+	Artistes []ArtistListItem
+}
+
+type ConcertPageData struct {
+	Events []ConcertData
+}

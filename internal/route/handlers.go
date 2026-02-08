@@ -8,6 +8,10 @@ import (
 
 func Launch() {
 	http.HandleFunc("/", home)
+	http.HandleFunc("/artistes", allArtistes)
+	http.HandleFunc("/search", search)
+	http.HandleFunc("/concert", concert)
+	http.HandleFunc("/artiste/", artist)
 
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
