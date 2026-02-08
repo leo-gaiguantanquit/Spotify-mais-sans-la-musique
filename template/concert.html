@@ -1,8 +1,146 @@
-<main class="app-main min-h-screen flex flex-col items-center justify-start py-16">
-    <h1 class="text-3xl md:text-5xl font-bold text-main mb-10 text-center">Trouve un concert proche</h1>
-    <div class="w-full max-w-3xl h-[500px] bg-surface rounded-2xl shadow-2xl flex items-center justify-center">
-        <!-- Ici s'affichera la carte interactive (map) -->
-        <!-- <div id="map" class="w-full h-full"></div> -->
-        <span class="text-muted">Carte à venir...</span>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    
+    /* Custom Popup Styles */
+    .leaflet-popup-content-wrapper {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .leaflet-popup-tip {
+        background: rgba(255, 255, 255, 0.95);
+    }
+</style>
+
+<main class="bg-[#121212] text-white font-sans min-h-screen p-4 md:p-8 pb-20 overflow-x-hidden selection:bg-green-500 selection:text-black">
+    <h1 class="text-4xl md:text-6xl font-black mb-10 text-center tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+        Concerts à venir en France
+    </h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+        <!-- List Section -->
+        <div class="flex flex-col gap-4 h-[500px] lg:h-[70vh] overflow-y-auto no-scrollbar pr-2 order-2 lg:order-1">
+            {{range .Events}}
+            <div class="concert-item backdrop-blur-md bg-neutral-900/50 border border-white/5 rounded-xl p-4 flex justify-between items-center group hover:bg-white/5 transition-colors cursor-pointer" 
+                 data-lat="{{.Lat}}" data-lng="{{.Lng}}">
+                <div class="flex items-center gap-6">
+                    <!-- Date Badge -->
+                    <div class="flex flex-col items-center justify-center bg-neutral-800 w-16 h-16 rounded-lg group-hover:bg-green-500 group-hover:text-black transition-colors shrink-0">
+                        <span class="text-xl font-bold leading-none">{{slice .Date 0 2}}</span>
+                        <span class="text-xs font-bold uppercase">{{slice .Date 3}}</span>
+                    </div>
+                    <!-- Info -->
+                    <div>
+                        <h3 class="font-bold text-lg group-hover:text-green-400 transition-colors line-clamp-1 mr-2">{{.Name}}</h3> 
+                        <p class="text-sm text-gray-400 font-semibold">{{.City}}</p>
+                        <p class="text-xs text-gray-500 hidden sm:block">{{.Venue}}</p>
+                    </div>
+                </div>
+                <!-- Action -->
+                <a href="{{.TicketUrl}}" target="_blank" class="opacity-0 group-hover:opacity-100 border border-gray-500 hover:border-green-500 hover:text-green-500 text-white text-xs font-bold py-2 px-6 rounded-full transition-all shrink-0 ml-4 hidden sm:block">Billet</a>
+            </div>
+            {{else}}
+            <div class="text-center text-gray-500 py-10">Aucun concert trouvé.</div>
+            {{end}}
+        </div>
+
+        <!-- Map Section -->
+        <div class="relative w-full h-[500px] lg:h-[70vh] rounded-3xl overflow-hidden shadow-2xl border border-white/10 group order-1 lg:order-2">
+            <div id="map-container" class="w-full h-full bg-neutral-800 z-0"></div>
+        </div>
     </div>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Initialisation de la carte...");
+
+        // Initialiser la carte centrée par défaut (Paris)
+        var map = L.map('map-container').setView([46.603354, 1.888334], 6);
+
+        // Utiliser des tuiles sombres pour aller avec le thème (CartoDB Dark Matter)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        var bounds = L.latLngBounds();
+        var hasConcerts = false;
+        var markers = [];
+
+        // Itérer sur chaque élément de concert pour récupérer les coordonnées
+        document.querySelectorAll('.concert-item').forEach(function(item) {
+            var lat = parseFloat(item.getAttribute('data-lat'));
+            var lng = parseFloat(item.getAttribute('data-lng'));
+
+            // Vérifier si les coordonnées sont valides
+            if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
+                hasConcerts = true;
+                
+                // Créer un marqueur personnalisé (vert Spotify)
+                var customIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: "<div style='background-color:#22c55e; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px #22c55e;'></div>",
+                    iconSize: [12, 12],
+                    iconAnchor: [6, 6]
+                });
+
+                var marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
+
+                // Récupérer les infos pour la popup
+                var artistName = item.querySelector('h3').textContent;
+                var city = item.querySelectorAll('p')[0].textContent;
+                var venue = item.querySelectorAll('p')[1].textContent;
+                var dateTitle = item.querySelectorAll('.flex-col span');
+                var dateStr = "";
+                if(dateTitle.length >= 2) {
+                    dateStr = dateTitle[0].textContent + " " + dateTitle[1].textContent;
+                }
+
+                marker.bindPopup(`
+                    <div class="text-center p-1 min-w-[120px]">
+                        <strong class="text-black block text-sm mb-1">${artistName}</strong>
+                        <div class="text-xs text-gray-800 mb-1">${city}</div>
+                        <div class="text-xs text-gray-500 mb-2">${venue}</div>
+                        <div class="text-xs font-bold text-green-600 uppercase mb-2">${dateStr}</div>
+                        <a href="${item.querySelector('a').href}" target="_blank" class="inline-block bg-[#1DB954] text-white font-bold py-1 px-3 rounded-full text-[10px] no-underline hover:bg-[#1ed760] transition-colors">
+                            Réserver
+                        </a>
+                    </div>
+                `);
+
+                markers.push({ el: item, marker: marker });
+                bounds.extend([lat, lng]);
+
+                // Interaction : clic sur la liste centre la carte
+                item.addEventListener('click', function() {
+                    map.flyTo([lat, lng], 10, {
+                        animate: true,
+                        duration: 1.5
+                    });
+                    marker.openPopup();
+                });
+
+                // Interaction au survol de la liste
+                item.addEventListener('mouseenter', function() {
+                    marker.getElement().style.transform += " scale(1.5)";
+                    marker.getElement().style.transition = "transform 0.3s";
+                });
+                item.addEventListener('mouseleave', function() {
+                    marker.getElement().style.transform = marker.getElement().style.transform.replace(" scale(1.5)", "");
+                });
+            }
+        });
+
+        // Ajuster la vue pour montrer tous les marqueurs si on en a trouvé
+        if (hasConcerts) {
+            map.fitBounds(bounds, { padding: [50, 50] });
+        }
+    });
+</script>

@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" href="../static/css/style.css">
+    <script src="/static/js/search.js" defer></script>
 </head>
 
 <nav class="nav" role="navigation" aria-label="Main navigation">
@@ -8,11 +9,11 @@
     </div>
     <ul class="nav__links">
         <li><a href="/home">Accueil</a></li>
-        <li><a href="/artiste">Artistes</a></li>
+        <li><a href="/artistes">Artistes</a></li>
         <li><a href="/concert">Concerts</a></li>
-        <li class="nav__item nav__search">
+        <li class="nav__item nav__search" style="position: relative;">
             <form action="/search" method="get" class="nav__search" role="search">
-                <input type="search" name="q" placeholder="Chercher un artiste ou un concert..." aria-label="Rechercher">
+                <input type="search" id="search-input" name="q" placeholder="Chercher un artiste ou un concert..." aria-label="Rechercher" autocomplete="off">
                 <button type="submit" class="btn btn--search">Rechercher</button>
             </form>
         </li>
