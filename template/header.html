@@ -1,0 +1,70 @@
+<nav class="sticky top-0 z-50 bg-gradient-to-b from-surface to-surface px-4 md:px-6 py-2 flex items-center justify-between gap-4" role="navigation" aria-label="Main navigation">
+    <!-- Logo -->
+    <div class="flex items-center gap-2">
+        <a href="/"><img src="../static/img/LightLogo.png" alt="Logo" id="nav__logo" class="h-12 md:h-12"></a>
+    </div>
+
+    <!-- Liens de navigation (visibles uniquement sur desktop) -->
+    <ul class="hidden md:flex items-center gap-2 list-none m-0 p-0">
+        <li><a href="/" class="text-muted hover:text-main px-3 py-2 rounded hover:bg-white/3 font-semibold text-sm transition">Accueil</a></li>
+        <li><a href="/artistes" class="text-muted hover:text-main px-3 py-2 rounded hover:bg-white/3 font-semibold text-sm transition">Artistes</a></li>
+        <li><a href="/concert" class="text-muted hover:text-main px-3 py-2 rounded hover:bg-white/3 font-semibold text-sm transition">Concerts</a></li>
+        <!-- Champ de recherche -->
+        <li class="relative">
+            <form action="/search" method="get" class="flex" role="search">
+                <input type="search" id="search-input" name="q" placeholder="Chercher..." aria-label="Rechercher" autocomplete="off" class="px-3 py-2 rounded-full border border-[var(--border)] bg-[var(--surface-2)] text-main placeholder-[var(--muted)] outline-none focus:border-accent w-64 text-sm transition-colors">
+                <button type="submit" class="hidden">Rechercher</button>
+            </form>
+        </li>
+        <!-- Bascule thème clair/sombre -->
+        <li>
+            <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer theme-switch">
+                <div class="relative w-11 h-6 bg-gray-500 rounded-full peer peer-focus:ring-2 peer-focus:ring-accent peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent transition-colors"></div>
+            </label>
+        </li>
+    </ul>
+
+    <!-- Bouton burger mobile (visible uniquement sur petits écrans) -->
+    <button id="menu-toggle" aria-label="Menu" aria-expanded="false" class="md:hidden flex flex-col gap-1 p-1 cursor-pointer">
+        <span class="w-6 h-0.5 bg-main rounded block transition"></span>
+        <span class="w-6 h-0.5 bg-main rounded block transition"></span>
+        <span class="w-6 h-0.5 bg-main rounded block transition"></span>
+    </button>
+</nav>
+
+<!-- Overlay sombre quand le menu mobile est ouvert -->
+<div id="mobile-menu-overlay" class="hidden fixed inset-0 bg-black/45 z-40 md:hidden transition"></div>
+
+<!-- Panneau menu mobile glissant depuis la droite -->
+<div id="mobile-menu" class="hidden fixed top-0 right-0 h-screen w-4/5 max-w-sm bg-surface shadow-lg z-50 md:hidden flex flex-col gap-4 p-4 transform translate-x-full transition-transform duration-300">
+    <!-- Bouton fermer le menu -->
+    <button id="menu-close" aria-label="Fermer" class="self-end text-2xl text-main font-light">×</button>
+    
+    <!-- Liens du menu mobile -->
+    <ul class="list-none m-0 p-0 flex flex-col gap-3">
+        <li><a href="/" class="block text-main px-2 py-2 font-semibold text-sm">Accueil</a></li>
+        <li><a href="/artistes" class="block text-main px-2 py-2 font-semibold text-sm">Artistes</a></li>
+        <li><a href="/concert" class="block text-main px-2 py-2 font-semibold text-sm">Concerts</a></li>
+        <!-- Champ de recherche mobile -->
+        <li>
+            <form action="/search" method="get" class="relative" role="search">
+                <input type="search" id="search-input-mobile" name="q" placeholder="Chercher..." aria-label="Rechercher" autocomplete="off" class="w-full px-3 py-2 rounded-full border border-[var(--border)] bg-[var(--surface-2)] text-main placeholder-[var(--muted)] outline-none focus:border-accent text-sm transition-colors">
+                <button type="submit" class="hidden">Rechercher</button>
+            </form>
+        </li>
+        <!-- Bascule thème mobile -->
+        <li class="flex items-center gap-2">
+            <span class="text-muted text-sm">Thème</span>
+            <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer theme-switch">
+                <div class="relative w-11 h-6 bg-gray-500 rounded-full peer peer-focus:ring-2 peer-focus:ring-accent peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent transition-colors"></div>
+            </label>
+        </li>
+    </ul>
+</div>
+
+<!-- Scripts de gestion du thème et du menu burger -->
+<script src="/static/js/search.js" defer></script>
+<script src="/static/js/theme-toggle.js" defer></script>
+<script src="/static/js/burger.js" defer></script>

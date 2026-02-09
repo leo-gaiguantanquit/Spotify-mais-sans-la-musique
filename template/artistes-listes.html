@@ -1,3 +1,25 @@
-<template>
-    
-</template>
+<main class="app-main min-h-screen py-10 md:py-16 px-4 md:px-8">
+  <h1 class="text-3xl md:text-5xl font-bold text-main mb-6 md:mb-10 text-center">Artistes</h1>
+  
+  <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8 md:mb-10">
+    <a href="/artistes?genre=pop" class="bg-surface hover:bg-green-500 text-main hover:text-black font-bold py-2 px-4 rounded-full transition-colors border border-green-500/30">Pop</a>
+    <a href="/artistes?genre=rock" class="bg-surface hover:bg-green-500 text-main hover:text-black font-bold py-2 px-4 rounded-full transition-colors border border-green-500/30">Rock</a>
+    <a href="/artistes?genre=rap" class="bg-surface hover:bg-green-500 text-main hover:text-black font-bold py-2 px-4 rounded-full transition-colors border border-green-500/30">Rap</a>
+    <a href="/artistes?genre=jazz" class="bg-surface hover:bg-green-500 text-main hover:text-black font-bold py-2 px-4 rounded-full transition-colors border border-green-500/30">Jazz</a>
+    <a href="/artistes?genre=metal" class="bg-surface hover:bg-green-500 text-main hover:text-black font-bold py-2 px-4 rounded-full transition-colors border border-green-500/30">Metal</a>
+    <a href="/artistes?genre=classical" class="bg-surface hover:bg-green-500 text-main hover:text-black font-bold py-2 px-4 rounded-full transition-colors border border-green-500/30">Classique</a>
+    <a href="/artistes?genre=electronic" class="bg-surface hover:bg-green-500 text-main hover:text-black font-bold py-2 px-4 rounded-full transition-colors border border-green-500/30">Electro</a>
+    <a href="/artistes?genre=reggae" class="bg-surface hover:bg-green-500 text-main hover:text-black font-bold py-2 px-4 rounded-full transition-colors border border-green-500/30">Reggae</a>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    {{range .Artistes}}
+    <div class="bg-surface rounded-2xl shadow-xl p-6 flex flex-col items-center gap-4">
+      <img src="{{.Image}}" alt="Photo de {{.Nom}}" class="w-32 h-32 rounded-full object-cover mb-2">
+      <h2 class="text-xl font-bold text-main">{{.Nom}}</h2>
+      <p class="text-muted text-sm mb-2">{{.Genre}}</p>
+      <a href="/artiste/{{.ID}}" class="bg-green-500 hover:bg-green-400 text-black font-bold py-2 px-6 rounded-full transition-transform hover:scale-105">Voir</a>
+    </div>
+    {{end}}
+  </div>
+</main>

@@ -1,3 +1,246 @@
-<template>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
-</template>
+    @keyframes radar {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(3); opacity: 0; }
+    }
+    .animate-radar { animation: radar 2s infinite; }
+    
+    /* Custom Popup Styles */
+    .leaflet-popup-content-wrapper {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .leaflet-popup-tip {
+        background: rgba(255, 255, 255, 0.95);
+    }
+</style>
+
+<main class="app-main font-sans min-h-screen pb-20 overflow-x-hidden selection:bg-green-500 selection:text-black">
+
+    <section class="px-4 md:px-8 py-6 md:py-10">
+        <div class="relative w-full rounded-3xl overflow-hidden bg-surface shadow-2xl h-[450px] md:h-[500px] flex items-end md:items-center">
+            
+            <div class="absolute inset-0">
+                <img src="{{.Artist_img_url}}" alt="Photo de {{.Artist_name}}" class="w-full h-full object-cover opacity-60 mix-blend-overlay hover:scale-105 transition-transform duration-[2000ms]">
+                <div class="absolute inset-0 bg-gradient-to-r from-black via-[#181818]/80 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 p-6 md:p-12 w-full md:w-2/3 flex flex-col justify-center h-full">
+                <div class="mb-6">
+                    
+                    <h1 class="text-4xl md:text-6xl lg:text-8xl font-black mb-4 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                        {{.Artist_name}}
+                    </h1>
+                    
+                    <p class="text-gray-300 text-base md:text-lg italic max-w-xl border-l-4 border-green-500 pl-4 mb-6 md:mb-8">
+                        {{.Artist_desc}}
+                    </p>
+
+                    <a href="{{.Artist_url}}" target="_blank" class="bg-green-500 hover:bg-green-400 text-black font-bold py-2 md:py-3 px-6 md:px-8 rounded-full transition-transform hover:scale-105 shadow-lg shadow-green-500/20 text-sm md:text-base inline-block">
+                        Suivre sur Spotify
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-8 mb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="flex flex-col h-full">
+                <h2 class="text-2xl font-bold mb-6 tracking-tighter">Biographie</h2>
+                <div class="relative w-full h-full min-h-[300px] rounded-3xl overflow-hidden shadow-2xl border border-[var(--border)] bg-surface p-8">
+                     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cube-coat.png')] opacity-5"></div>
+                     
+                     <div class="relative z-10 text-muted text-lg leading-relaxed overflow-y-auto no-scrollbar max-h-[400px]">
+                        {{.Artist_bio}}
+                     </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col h-full">
+                <h2 class="text-2xl font-bold mb-6 tracking-tighter">Top Titres</h2>
+                <div class="flex flex-col gap-3">
+                    
+                    {{range .Artist_top_tracks}}
+                    <div class="backdrop-blur-md bg-surface border border-[var(--border)] rounded-xl p-4 flex justify-between items-center group hover:bg-[var(--surface-2)] transition-colors cursor-pointer">
+                        <div class="flex items-center gap-6">
+                            <div class="flex flex-col items-center justify-center bg-[var(--surface-2)] w-12 h-12 rounded-lg group-hover:bg-green-500 group-hover:text-black transition-colors">
+                                <span class="text-lg font-black">{{.Rank}}</span>
+                            </div>
+                            <h3 class="font-bold text-lg group-hover:text-green-400 transition-colors">{{.Title}}</h3>
+                        </div>
+                        <span class="text-muted font-mono text-sm border border-[var(--border)] px-2 py-1 rounded">{{.Duration}}</span>
+                    </div>
+                    {{end}}
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="px-8 mb-24">
+        <h2 class="text-2xl font-bold mb-6 tracking-tighter">Concerts</h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="flex flex-col gap-4 max-h-[500px] overflow-y-auto no-scrollbar">
+                {{range .Artist_concerts}}
+                <div class="concert-item backdrop-blur-md bg-surface border border-[var(--border)] rounded-xl p-4 flex justify-between items-center group hover:bg-[var(--surface-2)] transition-colors cursor-pointer" 
+                     data-lat="{{.Lat}}" data-lng="{{.Lng}}">
+                    <div class="flex items-center gap-6">
+                        <div class="flex flex-col items-center justify-center bg-[var(--surface-2)] w-16 h-16 rounded-lg group-hover:bg-green-500 group-hover:text-black transition-colors">
+                            <span class="text-xl font-bold leading-none">{{slice .Date 0 2}}</span>
+                            <span class="text-xs font-bold uppercase">{{slice .Date 3}}</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg group-hover:text-green-400 transition-colors">{{.City}}</h3>
+                            <p class="text-sm text-muted">{{.Venue}}</p>
+                        </div>
+                    </div>
+                    <a href="{{.TicketUrl}}" target="_blank" class="opacity-0 group-hover:opacity-100 border border-[var(--border)] hover:border-green-500 hover:text-green-500 text-main text-xs font-bold py-2 px-6 rounded-full transition-all">Billet</a>
+                </div>
+                {{else}}
+                <div class="p-4 text-muted">Aucun concert à venir trouvé.</div>
+                {{end}}
+            </div>
+
+            <div class="relative w-full h-full min-h-[300px] rounded-3xl overflow-hidden shadow-2xl border border-[var(--border)] group">
+                <div id="map-container" class="w-full h-full bg-surface relative min-h-[400px] z-0"></div>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Initialisation de la carte...");
+
+        // Initialiser la carte centrée par défaut (Paris)
+        var map = L.map('map-container').setView([48.8566, 2.3522], 3);
+
+        // Détection du thème pour choisir les tuiles
+        // IMPORTANTE: Le thème est appliqué sur document.documentElement (html), pas body
+        var isLight = document.documentElement.classList.contains('theme-light') || localStorage.getItem('theme') === 'light';
+        
+        var darkTilesUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+        var lightTilesUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+        var currentUrl = isLight ? lightTilesUrl : darkTilesUrl;
+        
+        var tiles = L.tileLayer(currentUrl, {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+
+        // Fonction pour mettre à jour les tuiles (avec protection anti-clignotement)
+        function updateMapTheme() {
+            var isLightNow = document.documentElement.classList.contains('theme-light');
+            var targetUrl = isLightNow ? lightTilesUrl : darkTilesUrl;
+            
+            if (currentUrl !== targetUrl) {
+                tiles.setUrl(targetUrl);
+                currentUrl = targetUrl;
+            }
+        }
+
+        // Observer les changements de classe sur <html>
+        var observer = new MutationObserver(function(mutations) {
+            var classChanged = mutations.some(function(mutation) {
+                return mutation.attributeName === 'class';
+            });
+            if (classChanged) {
+                updateMapTheme();
+            }
+        });
+        
+        // Observer html au lieu de body
+        observer.observe(document.documentElement, { attributes: true });
+
+        // Fallback: écouter les clics sur les toggles
+        var toggles = document.querySelectorAll('.theme-switch');
+        toggles.forEach(function(t) {
+            t.addEventListener('change', function() {
+                setTimeout(updateMapTheme, 50);
+            });
+        });
+
+        var bounds = L.latLngBounds();
+        var hasConcerts = false;
+        var markers = [];
+
+        // Itérer sur chaque élément de concert pour récupérer les coordonnées
+        document.querySelectorAll('.concert-item').forEach(function(item) {
+            var lat = parseFloat(item.getAttribute('data-lat'));
+            var lng = parseFloat(item.getAttribute('data-lng'));
+
+            // Vérifier si les coordonnées sont valides
+            if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
+                hasConcerts = true;
+                
+                // Créer un marqueur personnalisé (vert Spotify)
+                var customIcon = L.divIcon({
+                    className: 'custom-div-icon',
+                    html: "<div style='background-color:#22c55e; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px #22c55e;'></div>",
+                    iconSize: [12, 12],
+                    iconAnchor: [6, 6]
+                });
+
+                var marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
+
+                // Récupérer les infos pour la popup
+                var city = item.querySelector('h3').textContent;
+                var venue = item.querySelector('p').textContent;
+                var dateTitle = item.querySelectorAll('.flex-col span');
+                var dateStr = "";
+                if(dateTitle.length >= 2) {
+                    dateStr = dateTitle[0].textContent + " " + dateTitle[1].textContent;
+                }
+
+                marker.bindPopup(`
+                    <div class="text-center p-1">
+                        <strong class="text-black block text-sm mb-1">${city}</strong>
+                        <div class="text-xs text-gray-600 mb-1">${venue}</div>
+                        <div class="text-xs font-bold text-green-600 uppercase">${dateStr}</div>
+                    </div>
+                `);
+
+                markers.push({ el: item, marker: marker });
+                bounds.extend([lat, lng]);
+
+                // Interaction : clic sur la liste centre la carte
+                item.addEventListener('click', function() {
+                    map.flyTo([lat, lng], 10, {
+                        animate: true,
+                        duration: 1.5
+                    });
+                    marker.openPopup();
+                });
+
+                // Interaction au survol de la liste
+                item.addEventListener('mouseenter', function() {
+                    marker.getElement().style.transform += " scale(1.5)";
+                    marker.getElement().style.transition = "transform 0.3s";
+                });
+                item.addEventListener('mouseleave', function() {
+                    marker.getElement().style.transform = marker.getElement().style.transform.replace(" scale(1.5)", "");
+                });
+            }
+        });
+
+        // Ajuster la vue pour montrer tous les marqueurs si on en a trouvé
+        if (hasConcerts) {
+            map.fitBounds(bounds, { padding: [50, 50] });
+        }
+    });
+</script>
