@@ -25,119 +25,131 @@
 
 <main class="app-main font-sans min-h-screen pb-20 overflow-x-hidden selection:bg-green-500 selection:text-black">
 
-    <section class="pt-10 pb-16 relative">
-        <h2 class="text-2xl font-bold mb-6 px-8 tracking-tighter">Top Titres France <span class="text-green-500 text-sm font-normal uppercase tracking-widest ml-2">En Tendance</span></h2>
+    <section class="pt-6 md:pt-10 pb-10 md:pb-16 relative">
+        <h2 class="text-xl md:text-2xl font-bold mb-4 md:mb-6 px-4 md:px-8 tracking-tighter">Top Titres France <span class="text-green-500 text-xs md:text-sm font-normal uppercase tracking-widest ml-2">En Tendance</span></h2>
         
-        <div class="absolute top-24 left-0 w-24 h-64 bg-gradient-to-r from-[var(--bg)] to-transparent z-20 pointer-events-none"></div>
-        <div class="absolute top-24 right-0 w-24 h-64 bg-gradient-to-l from-[var(--bg)] to-transparent z-20 pointer-events-none"></div>
+        <div class="absolute top-24 left-0 w-8 md:w-24 h-64 bg-gradient-to-r from-[var(--bg)] to-transparent z-20 pointer-events-none"></div>
+        <div class="absolute top-24 right-0 w-8 md:w-24 h-64 bg-gradient-to-l from-[var(--bg)] to-transparent z-20 pointer-events-none"></div>
 
         <div class="relative w-full overflow-hidden group">
-            <div class="flex w-max animate-scroll hover:cursor-pointer gap-8 px-8 py-6">
+            <div class="flex w-max animate-scroll hover:cursor-pointer gap-4 md:gap-8 px-4 md:px-8 py-6">
                 
                 {{.TopTitre_list}}
             </div>
         </div>
     </section>
 
-    <section class="px-8 mb-24">
-        <h2 class="text-2xl font-bold mb-6">Artiste du Moment</h2>
+    <section class="px-4 md:px-8 mb-16 md:mb-24">
+        <h2 class="text-xl md:text-2xl font-bold mb-4 md:mb-6">Artiste du Moment</h2>
         
-        <div class="relative w-full rounded-3xl overflow-hidden bg-surface shadow-2xl h-[500px] flex items-end md:items-center">
+        <div class="relative w-full rounded-3xl overflow-hidden bg-surface shadow-2xl h-[400px] md:h-[500px] flex items-end md:items-center">
             
             <div class="absolute inset-0">
                 <img src="{{.PP_mom_url}}" class="w-full h-full object-cover opacity-60 mix-blend-overlay hover:scale-105 transition-transform duration-[2000ms]" alt="Background Artist">
                 <div class="absolute inset-0 bg-gradient-to-r from-black via-[#181818]/80 to-transparent"></div>
             </div>
 
-            <div class="relative z-10 p-8 md:p-12 w-full md:w-1/2 flex flex-col justify-center h-full">
-                <div class="mb-6">
-                    <span class="bg-green-500 text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">#1 Mondial</span>
-                    <h1 class="text-5xl md:text-7xl font-black mt-4 mb-2 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">{{.TopArtist_name}}</h1>
-                    <p class="text-muted text-lg italic">{{.TopArtist_desc}}</p>
+            <div class="relative z-10 p-6 md:p-12 w-full md:w-1/2 flex flex-col justify-center h-full">
+                <div class="mb-4 md:mb-6">
+                    <span class="bg-green-500 text-black text-[10px] md:text-xs font-bold px-2 md:px-3 py-1 rounded-full uppercase tracking-widest">#1 Mondial</span>
+                    <h1 class="text-4xl md:text-7xl font-black mt-2 md:mt-4 mb-2 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">{{.TopArtist_name}}</h1>
+                    <p class="text-muted text-base md:text-lg italic">{{.TopArtist_desc}}</p>
                 </div>
 
-                <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg">
+                <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-4 md:p-6 shadow-lg">
                     <h4 class="text-xs uppercase text-gray-400 font-bold mb-4 tracking-wider">Top Titres</h4>
                     <ul class="space-y-3">
-                        <li class="flex justify-between items-center group cursor-pointer">
-                            <div class="flex items-center gap-3">
-                                <span class="text-green-500 font-mono">01</span>
-                                <span class="group-hover:text-green-400 transition-colors">{{.TopArtist_track01_name}}</span>
-                            </div>
-                            <span class="text-gray-500 text-sm">{{.TopArtist_track01_time}}</span>
+                        <li>
+                            <a href="/artiste/{{.TopArtist_ID}}" class="flex justify-between items-center group cursor-pointer">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-green-500 font-mono">01</span>
+                                    <span class="group-hover:text-green-400 transition-colors">{{.TopArtist_track01_name}}</span>
+                                </div>
+                                <span class="text-gray-500 text-sm">{{.TopArtist_track01_time}}</span>
+                            </a>
                         </li>
-                        <li class="flex justify-between items-center group cursor-pointer">
-                            <div class="flex items-center gap-3">
-                                <span class="text-main font-mono">02</span>
-                                <span class="group-hover:text-green-400 transition-colors">{{.TopArtist_track02_name}}</span>
-                            </div>
-                            <span class="text-gray-500 text-sm">{{.TopArtist_track02_time}}</span>
+                        <li>
+                            <a href="/artiste/{{.TopArtist_ID}}" class="flex justify-between items-center group cursor-pointer">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-main font-mono">02</span>
+                                    <span class="group-hover:text-green-400 transition-colors">{{.TopArtist_track02_name}}</span>
+                                </div>
+                                <span class="text-gray-500 text-sm">{{.TopArtist_track02_time}}</span>
+                            </a>
                         </li>
-                        <li class="flex justify-between items-center group cursor-pointer">
-                            <div class="flex items-center gap-3">
-                                <span class="text-main font-mono">03</span>
-                                <span class="group-hover:text-green-400 transition-colors">{{.TopArtist_track03_name}}</span>
-                            </div>
-                            <span class="text-gray-500 text-sm">{{.TopArtist_track03_time}}</span>
+                        <li>
+                            <a href="/artiste/{{.TopArtist_ID}}" class="flex justify-between items-center group cursor-pointer">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-main font-mono">03</span>
+                                    <span class="group-hover:text-green-400 transition-colors">{{.TopArtist_track03_name}}</span>
+                                </div>
+                                <span class="text-gray-500 text-sm">{{.TopArtist_track03_time}}</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
                 
-                <div class="mt-8 flex gap-4">
-                     <a class="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full transition-transform hover:scale-105">Découvrire +</a>
-                     <a class="border border-gray-500 hover:border-white text-white font-bold py-3 px-8 rounded-full transition-colors" href="{{.TopArtistURL}}" target="_blank">Suivre sur Spotify</a>
+                <div class="mt-6 md:mt-8 flex flex-col sm:flex-row gap-3 md:gap-4">
+                     <a class="bg-green-500 hover:bg-green-400 text-black font-bold py-2 md:py-3 px-6 md:px-8 rounded-full text-center text-sm md:text-base transition-transform hover:scale-105" href="/artiste/{{.TopArtist_ID}}">Découvrir +</a>
+                     <a class="border border-gray-500 hover:border-white text-white font-bold py-2 md:py-3 px-6 md:px-8 rounded-full text-center text-sm md:text-base transition-colors" href="{{.TopArtistURL}}" target="_blank">Suivre sur Spotify</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="px-8 mb-24">
-        <h2 class="text-2xl font-bold mb-6">Artiste Prometteur</h2>
+    <section class="px-4 md:px-8 mb-16 md:mb-24">
+        <h2 class="text-xl md:text-2xl font-bold mb-4 md:mb-6">Artiste Prometteur</h2>
         
-        <div class="relative w-full rounded-3xl overflow-hidden bg-surface shadow-2xl h-[500px] flex items-end md:items-center justify-end">
+        <div class="relative w-full rounded-3xl overflow-hidden bg-surface shadow-2xl h-[400px] md:h-[500px] flex items-end md:items-center justify-end">
             
             <div class="absolute inset-0">
                 <img src="{{.PP_prom_url}}" class="w-full h-full object-cover opacity-60 mix-blend-hard-light hover:scale-105 transition-transform duration-[2000ms]" alt="Background Artist">
                 <div class="absolute inset-0 bg-gradient-to-l from-black via-[#181818]/90 to-transparent"></div>
             </div>
 
-            <div class="relative z-10 p-8 md:p-12 w-full md:w-1/2 flex flex-col justify-center h-full text-right">
-                <div class="mb-6 flex flex-col items-end">
-                    <span class="bg-blue-600 text-main text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Découverte</span>
-                    <h1 class="text-5xl md:text-7xl font-black mt-4 mb-2 tracking-tighter text-transparent bg-clip-text bg-gradient-to-l from-white to-gray-400">{{.PromArtist_name}}</h1>
-                    <p class="text-muted text-lg italic">{{.PromArtist_desc}}</p>
+            <div class="relative z-10 p-6 md:p-12 w-full md:w-1/2 flex flex-col justify-center h-full text-right">
+                <div class="mb-4 md:mb-6 flex flex-col items-end">
+                    <span class="bg-blue-600 text-main text-[10px] md:text-xs font-bold px-2 md:px-3 py-1 rounded-full uppercase tracking-widest">Découverte</span>
+                    <h1 class="text-4xl md:text-7xl font-black mt-2 md:mt-4 mb-2 tracking-tighter text-transparent bg-clip-text bg-gradient-to-l from-white to-gray-400">{{.PromArtist_name}}</h1>
+                    <p class="text-muted text-base md:text-lg italic line-clamp-2 md:line-clamp-none">{{.PromArtist_desc}}</p>
                 </div>
 
-                <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6 shadow-lg ml-auto w-full">
+                <div class="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-4 md:p-6 shadow-lg ml-auto w-full">
                     <h4 class="text-xs uppercase text-gray-400 font-bold mb-4 tracking-wider">Titres Phares</h4>
                     <ul class="space-y-3">
-                        <li class="flex justify-between items-center group cursor-pointer flex-row-reverse">
-                            <div class="flex items-center gap-3 flex-row-reverse">
-                                <span class="text-blue-500 font-mono">01</span>
-                                <span class="group-hover:text-blue-400 transition-colors">{{.PromArtist_track01_name}}</span>
-                            </div>
-                            <span class="text-gray-500 text-sm">{{.PromArtist_track01_time}}</span>
+                        <li>
+                            <a href="/artiste/{{.PromArtist_ID}}" class="flex justify-between items-center group cursor-pointer flex-row-reverse">
+                                <div class="flex items-center gap-3 flex-row-reverse">
+                                    <span class="text-blue-500 font-mono">01</span>
+                                    <span class="group-hover:text-blue-400 transition-colors">{{.PromArtist_track01_name}}</span>
+                                </div>
+                                <span class="text-gray-500 text-sm">{{.PromArtist_track01_time}}</span>
+                            </a>
                         </li>
-                        <li class="flex justify-between items-center group cursor-pointer flex-row-reverse">
-                            <div class="flex items-center gap-3 flex-row-reverse">
-                                <span class="text-main font-mono">02</span>
-                                <span class="group-hover:text-blue-400 transition-colors">{{.PromArtist_track02_name}}</span>
-                            </div>
-                            <span class="text-gray-500 text-sm">{{.PromArtist_track02_time}}</span>
+                        <li>
+                            <a href="/artiste/{{.PromArtist_ID}}" class="flex justify-between items-center group cursor-pointer flex-row-reverse">
+                                <div class="flex items-center gap-3 flex-row-reverse">
+                                    <span class="text-main font-mono">02</span>
+                                    <span class="group-hover:text-blue-400 transition-colors">{{.PromArtist_track02_name}}</span>
+                                </div>
+                                <span class="text-gray-500 text-sm">{{.PromArtist_track02_time}}</span>
+                            </a>
                         </li>
-                        <li class="flex justify-between items-center group cursor-pointer flex-row-reverse">
-                            <div class="flex items-center gap-3 flex-row-reverse">
-                                <span class="text-main font-mono">03</span>
-                                <span class="group-hover:text-blue-400 transition-colors">{{.PromArtist_track03_name}}</span>
-                            </div>
-                            <span class="text-gray-500 text-sm">{{.PromArtist_track03_time}}</span>
+                        <li>
+                            <a href="/artiste/{{.PromArtist_ID}}" class="flex justify-between items-center group cursor-pointer flex-row-reverse">
+                                <div class="flex items-center gap-3 flex-row-reverse">
+                                    <span class="text-main font-mono">03</span>
+                                    <span class="group-hover:text-blue-400 transition-colors">{{.PromArtist_track03_name}}</span>
+                                </div>
+                                <span class="text-gray-500 text-sm">{{.PromArtist_track03_time}}</span>
+                            </a>
                         </li>
                     </ul>
                 </div>
 
-                 <div class="mt-8 flex gap-4 justify-end">
-                     <a class="border border-gray-500 hover:border-white text-white font-bold py-3 px-8 rounded-full transition-colors" href="{{.PromArtistURL}}" target="_blank">Suivre sur Spotify</a>
-                     <a class="bg-white hover:bg-gray-200 text-black font-bold py-3 px-8 rounded-full transition-transform hover:scale-105" >Découvrire +</a>
+                 <div class="mt-6 md:mt-8 flex flex-col-reverse sm:flex-row gap-3 md:gap-4 justify-end">
+                     <a class="border border-gray-500 hover:border-white text-white font-bold py-2 md:py-3 px-6 md:px-8 rounded-full text-center text-sm md:text-base transition-colors" href="{{.PromArtistURL}}" target="_blank">Suivre sur Spotify</a>
+                     <a class="bg-white hover:bg-gray-200 text-black font-bold py-2 md:py-3 px-6 md:px-8 rounded-full text-center text-sm md:text-base transition-transform hover:scale-105" href="/artiste/{{.PromArtist_ID}}">Découvrir +</a>
                 </div>
             </div>
         </div>
