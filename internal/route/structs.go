@@ -8,6 +8,7 @@ type HomeData struct {
 	PP_mom_url              string
 	TopArtist_name          string
 	TopArtist_desc          string
+	TopArtist_ID            string
 	TopArtist_track01_name  string
 	TopArtist_track01_time  string
 	TopArtist_track02_name  string
@@ -18,6 +19,7 @@ type HomeData struct {
 	PP_prom_url             string
 	PromArtist_name         string
 	PromArtist_desc         string
+	PromArtist_ID           string
 	PromArtistURL           string
 	PromArtist_track01_name string
 	PromArtist_track01_time string
@@ -50,6 +52,7 @@ type ArtistData struct {
 	Artist_bio        template.HTML
 	Artist_top_tracks []TrackData
 	Artist_concerts   []ConcertData
+	Artist_url        string
 }
 
 type ArtistListItem struct {

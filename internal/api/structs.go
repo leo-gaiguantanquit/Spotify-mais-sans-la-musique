@@ -8,6 +8,7 @@ type SpotifyPlaylist struct {
 				Name    string `json:"name"`
 				Artists []struct {
 					Name string `json:"name"`
+					ID   string `json:"id"`
 				} `json:"artists"`
 				Album struct {
 					Images []struct {

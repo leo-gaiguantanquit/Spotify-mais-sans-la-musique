@@ -63,14 +63,17 @@ func home(w http.ResponseWriter, r *http.Request) {
 			}
 
 			artistName := ""
+			artistID := ""
 			if len(item.Track.Artists) > 0 {
 				artistName = item.Track.Artists[0].Name
+				artistID = item.Track.Artists[0].ID
 			}
 
 			tracksHTML += render("layer/trans-pp-topTitre", map[string]interface{}{
 				"PP_url":     imgUrl,
 				"Name":       item.Track.Name,
 				"ArtistName": artistName,
+				"ArtistID":   artistID,
 			})
 		}
 	}
@@ -82,6 +85,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		PP_mom_url:             topArtiste.Images[0].URL,
 		TopArtist_name:         topArtiste.Name,
 		TopArtist_desc:         strings.Join(topArtiste.Genres, " - "),
+		TopArtist_ID:           topArtistID,
 		TopArtist_track01_name: topArtisteTrack.Tracks[0].Name,
 		TopArtist_track01_time: utils.MsToTime(topArtisteTrack.Tracks[0].Duration),
 		TopArtist_track02_name: topArtisteTrack.Tracks[1].Name,
@@ -93,6 +97,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		PP_prom_url:             promArtiste.Images[0].URL,
 		PromArtist_name:         promArtiste.Name,
 		PromArtist_desc:         strings.Join(promArtiste.Genres, " - "),
+		PromArtist_ID:           promArtistID,
 		PromArtist_track01_name: promArtisteTrack.Tracks[0].Name,
 		PromArtist_track01_time: utils.MsToTime(promArtisteTrack.Tracks[0].Duration),
 		PromArtist_track02_name: promArtisteTrack.Tracks[1].Name,
@@ -193,6 +198,7 @@ func artist(w http.ResponseWriter, r *http.Request) {
 		Artist_bio:        template.HTML(bioPlaceholder),
 		Artist_top_tracks: tracks,
 		Artist_concerts:   concerts,
+		Artist_url:        artist.ExternalURLs.Spotify,
 	}
 
 	renderFile(artist.Name, render("artiste", data), w)

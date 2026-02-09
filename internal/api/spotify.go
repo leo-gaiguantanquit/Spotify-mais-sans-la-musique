@@ -77,7 +77,7 @@ func GetTopArtist() (*SpotifyPlaylist, error) {
 	utils.Debug(fmt.Sprintf("DEBUG: Playlist ID set to: '%s'", playlistID))
 
 	// Ajout du paramètre fields pour optimiser et market pour éviter les 404 sur les playlists officielles
-	apiURL := fmt.Sprintf("https://api.spotify.com/v1/playlists/%s?market=FR&fields=name,tracks.items(track(name,artists(name),album(images(url))))", playlistID)
+	apiURL := fmt.Sprintf("https://api.spotify.com/v1/playlists/%s?market=FR&fields=name,tracks.items(track(name,artists(name,id),album(images(url))))", playlistID)
 	utils.Debug(fmt.Sprintf("DEBUG: Constructed API URL: %s", apiURL))
 
 	utils.Debug(fmt.Sprintf("Fetching top artists from playlist %s...", playlistID))
