@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+// Launch initialise les routes HTTP de l'application et démarre le serveur web.
+// Il configure les handlers pour les différentes pages et sert les fichiers statiques.
 func Launch() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/artistes", allArtistes)

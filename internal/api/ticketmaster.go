@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+// TicketmasterEventResponse structure la réponse contenant les événements récupérés.
 type TicketmasterEventResponse struct {
 	Embedded struct {
 		Events []struct {
@@ -40,6 +41,7 @@ type TicketmasterEventResponse struct {
 	} `json:"_embedded"`
 }
 
+// GetArtistEvents recherche les événements (concerts) pour un artiste spécifique.
 func GetArtistEvents(artistName string) (*TicketmasterEventResponse, error) {
 	apiKey := config.GetTicketmasterKey()
 	if apiKey == "" {
@@ -79,6 +81,7 @@ func GetArtistEvents(artistName string) (*TicketmasterEventResponse, error) {
 	return &result, nil
 }
 
+// GetGenericEvents récupère une liste d'événements musicaux génériques (ex: à Paris).
 func GetGenericEvents() (*TicketmasterEventResponse, error) {
 	apiKey := config.GetTicketmasterKey()
 	if apiKey == "" {

@@ -18,6 +18,8 @@ var (
 	spotify_app string
 )
 
+// InitSpotify initialise le client Spotify en récupérant les identifiants
+// depuis la configuration et en générant un token d'accès.
 func InitSpotify() {
 	spotify_key, spotify_app = config.GetSpotifyKeyAndApp()
 	var err error
@@ -30,10 +32,12 @@ func InitSpotify() {
 	// GetTopArtist()  <-- removed call
 }
 
+// TokenResponse représente la réponse contenant le token d'accès Spotify.
 type TokenResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
+// getAccessToken demande un token d'accès à l'API Spotify via le flux Client Credentials.
 func getAccessToken(clientID, clientSecret string) (string, error) {
 	authURL := "https://accounts.spotify.com/api/token"
 
@@ -70,6 +74,8 @@ func getAccessToken(clientID, clientSecret string) (string, error) {
 	return tokenRes.AccessToken, nil
 }
 
+// GetTopArtist récupère une playlist locale (ex: Top 50 France) pour afficher des artistes populaires.
+// Retourne une structure SpotifyPlaylist contenant les artistes.
 func GetTopArtist() (*SpotifyPlaylist, error) {
 	utils.Debug("Starting GetTopArtist function")
 	// ID de la playlist Top 50 France
@@ -114,6 +120,7 @@ func GetTopArtist() (*SpotifyPlaylist, error) {
 	return &result, nil
 }
 
+// GetArtist récupère les informations détaillées d'un artiste à partir de son ID Spotify.
 func GetArtist(artisteID string) (*SpotifyArtist, error) {
 	utils.Debug("Starting GetArtist function")
 	utils.Debug(fmt.Sprintf("DEBUG: Artiste ID set to: '%s'", artisteID))
@@ -156,6 +163,7 @@ func GetArtist(artisteID string) (*SpotifyArtist, error) {
 	return &result, nil
 }
 
+// GetArtistTopTrack récupère les titres les plus populaires d'un artiste (Top Tracks).
 func GetArtistTopTrack(artisteID string) (*SpotifyArtistTopTracks, error) {
 	utils.Debug("Starting GetArtistTopTrack function")
 
@@ -195,6 +203,7 @@ func GetArtistTopTrack(artisteID string) (*SpotifyArtistTopTracks, error) {
 	return &result, nil
 }
 
+// Search effectue une recherche d'artistes et de titres via l'API Spotify.
 func Search(query string) (*SpotifySearchResponse, error) {
 	utils.Debug("Starting Search function")
 

@@ -1,5 +1,6 @@
 package api
 
+// SpotifyPlaylist structure la réponse d'une playlist (liste d'items).
 type SpotifyPlaylist struct {
 	Name   string `json:"name"`
 	Tracks struct {
@@ -20,6 +21,7 @@ type SpotifyPlaylist struct {
 	} `json:"tracks"`
 }
 
+// SpotifyArtist représente un artiste et ses détails.
 type SpotifyArtist struct {
 	ExternalURLs struct {
 		Spotify string `json:"spotify"`
@@ -42,6 +44,7 @@ type SpotifyArtist struct {
 	URI        string `json:"uri"`
 }
 
+// SpotifyArtistTopTracks contient la liste des titres les plus populaires d'un artiste.
 type SpotifyArtistTopTracks struct {
 	Tracks []struct {
 		ID       string `json:"id"`
@@ -56,6 +59,7 @@ type SpotifyArtistTopTracks struct {
 	} `json:"tracks"`
 }
 
+// SpotifySearchResponse structure la réponse d'une recherche (playlists, artistes, titres).
 type SpotifySearchResponse struct {
 	Playlists struct {
 		Items []struct {

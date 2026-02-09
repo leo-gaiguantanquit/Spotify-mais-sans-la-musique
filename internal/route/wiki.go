@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// PageData contient les données de base pour le rendu d'une page HTML (titre, contenu, header, footer).
 type PageData struct {
 	TabTitle string
 	Body     template.HTML
@@ -18,6 +19,8 @@ type PageData struct {
 	Footer   template.HTML
 }
 
+// home gère l'affichage de la page d'accueil (route "/").
+// Récupère les données des artistes mis en avant via l'API.
 func home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		renderFile("Cieelll - 404", render("404", nil), w)
@@ -110,6 +113,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	renderFile("Accueil", render("home", data), w)
 }
 
+// artist gère l'affichage de la page de profil d'un artiste (route "/artiste/{id}").
 func artist(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	if len(parts) < 3 || parts[2] == "" {
@@ -204,6 +208,7 @@ func artist(w http.ResponseWriter, r *http.Request) {
 	renderFile(artist.Name, render("artiste", data), w)
 }
 
+// renderFile génère la page complète (avec layout Header/Footer) et l'envoie au client.
 func renderFile(title string, content string, w http.ResponseWriter) {
 	header := render("header", nil)
 	footer := render("footer", nil)
@@ -217,6 +222,7 @@ func renderFile(title string, content string, w http.ResponseWriter) {
 	executeHTML("layout", data, w)
 }
 
+// executeHTML parse et exécute un fichier template spécifique directement dans le ResponseWriter.
 func executeHTML(fileName string, data any, w http.ResponseWriter) {
 	pathString := fmt.Sprintf("template/%v.html", fileName)
 
@@ -232,6 +238,7 @@ func executeHTML(fileName string, data any, w http.ResponseWriter) {
 	}
 }
 
+// render parse un fichier template et retourne le résultat sous forme de string.
 func render(fileName string, data any) string {
 	pathString := fmt.Sprintf("template/%v.html", fileName)
 
@@ -249,6 +256,7 @@ func render(fileName string, data any) string {
 	return buf.String()
 }
 
+// allArtistes gère l'affichage de la liste des artistes (route "/artistes").
 func allArtistes(w http.ResponseWriter, r *http.Request) {
 	utils.Log("Page Artistes ouverte")
 
@@ -294,6 +302,7 @@ func allArtistes(w http.ResponseWriter, r *http.Request) {
 	renderFile("Artistes", render("artistes-listes", data), w)
 }
 
+// concert gère l'affichage de la page des concerts (route "/concert").
 func concert(w http.ResponseWriter, r *http.Request) {
 	utils.Log("Page Concerts ouverte")
 
@@ -355,6 +364,7 @@ func concert(w http.ResponseWriter, r *http.Request) {
 	renderFile("Concert", render("concert", data), w)
 }
 
+// search gère la recherche d'artistes via une requête (route "/search").
 func search(w http.ResponseWriter, r *http.Request) {
 	utils.Log("Recherche")
 

@@ -1,13 +1,17 @@
+// Attend que le DOM soit entièrement chargé avant d'exécuter le script
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-input');
+    
+    // Création du conteneur pour les résultats de recherche
     const resultsContainer = document.createElement('div');
     resultsContainer.id = 'search-results';
     resultsContainer.className = 'search-results-dropdown';
     
-    // Insert results container after the input
+    // Insertion du conteneur après le champ de saisie
     searchInput.parentNode.appendChild(resultsContainer);
     
-    // Style for the results container (you can move this to style.css)
+    // Application des styles pour le conteneur des résultats
+    // Ces styles positionnent la liste déroulante sous la barre de recherche
     resultsContainer.style.position = 'absolute';
     resultsContainer.style.width = '300px';
     resultsContainer.style.maxHeight = '400px';
@@ -22,16 +26,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let debounceTimer;
 
+    // Écouteur d'événement sur la saisie dans le champ de recherche
     searchInput.addEventListener('input', function(e) {
         const query = e.target.value;
         
+        // Annule le timer précédent pour éviter les requêtes multiples (Debounce)
         clearTimeout(debounceTimer);
         
+        // Si la requête est trop courte, on cache les résultats
         if (query.length < 2) {
             resultsContainer.style.display = 'none';
             return;
         }
 
+        // Attend 300ms après la fin de la saisie avant d'envoyer la requête
         debounceTimer = setTimeout(() => {
             fetch(`/api/search?q=${encodeURIComponent(query)}`)
                 .then(response => response.json())
@@ -39,21 +47,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     displayResults(data);
                 })
                 .catch(err => {
-                    console.error('Error fetching search results:', err);
+                    console.error('Erreur lors de la récupération des résultats :', err);
                 });
-        }, 300); // 300ms debounce
+        }, 300);
     });
 
-    // Close results when clicking outside
+    // Ferme les résultats si on clique en dehors du champ ou de la liste
     document.addEventListener('click', function(e) {
         if (e.target !== searchInput && e.target !== resultsContainer && !resultsContainer.contains(e.target)) {
             resultsContainer.style.display = 'none';
         }
     });
 
+    // Fonction pour afficher les résultats de la recherche dans le DOM
     function displayResults(data) {
         resultsContainer.innerHTML = '';
         
+        // Si aucune donnée ou aucun artiste trouvé, on cache le conteneur
         if (!data || !data.artists || !data.artists.items || data.artists.items.length === 0) {
             resultsContainer.style.display = 'none';
             return;
@@ -66,15 +76,16 @@ document.addEventListener('DOMContentLoaded', function() {
         list.style.margin = '0';
         list.style.padding = '0';
 
-        // Limit to 5 results
+        // Limite l'affichage aux 8 premiers résultats
         const artists = data.artists.items.slice(0, 8);
 
         artists.forEach(artist => {
             const item = document.createElement('li');
             item.className = 'search-result-item';
             
+            // Création du lien vers la page de l'artiste
             const link = document.createElement('a');
-            link.href = `/artiste/${artist.id}`; // Adjusted to match your route structure
+            link.href = `/artiste/${artist.id}`;
             link.style.display = 'flex';
             link.style.alignItems = 'center';
             link.style.padding = '10px';
@@ -83,13 +94,15 @@ document.addEventListener('DOMContentLoaded', function() {
             link.style.borderBottom = '1px solid #333';
             link.style.transition = 'background-color 0.2s';
 
+            // Effet de survol
             link.onmouseover = function() { this.style.backgroundColor = '#333'; };
             link.onmouseout = function() { this.style.backgroundColor = 'transparent'; };
 
-            // Image
+            // Gestion de l'image de l'artiste
             const img = document.createElement('img');
             if (artist.images && artist.images.length > 0) {
-                img.src = artist.images[artist.images.length - 1].url; // Smallest image
+                // Utilise la plus petite image disponible
+                img.src = artist.images[artist.images.length - 1].url;
             } else {
                 img.src = 'https://placehold.co/40x40';
             }
@@ -99,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
             img.style.marginRight = '10px';
             img.style.objectFit = 'cover';
 
-            // Name and Info
+            // Conteneur pour le nom et le genre
             const infoDiv = document.createElement('div');
             infoDiv.style.display = 'flex';
             infoDiv.style.flexDirection = 'column';
@@ -110,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name.style.fontSize = '14px';
 
             const genre = document.createElement('span');
-            genre.textContent = "Artiste"; // You can show genre if available
+            genre.textContent = "Artiste"; 
             genre.style.fontSize = '12px';
             genre.style.color = '#b3b3b3';
 

@@ -23,25 +23,21 @@
     </h1>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 h-full">
-        <!-- List Section -->
         <div class="flex flex-col gap-3 md:gap-4 h-[400px] lg:h-[70vh] overflow-y-auto no-scrollbar pr-2 order-2 lg:order-1">
             {{range .Events}}
             <div class="concert-item backdrop-blur-md bg-neutral-900/50 border border-white/5 rounded-xl p-3 md:p-4 flex justify-between items-center group hover:bg-white/5 transition-colors cursor-pointer" 
                  data-lat="{{.Lat}}" data-lng="{{.Lng}}">
                 <div class="flex items-center gap-3 md:gap-6">
-                    <!-- Date Badge -->
                     <div class="flex flex-col items-center justify-center bg-neutral-800 w-12 h-12 md:w-16 md:h-16 rounded-lg group-hover:bg-green-500 group-hover:text-black transition-colors shrink-0">
                         <span class="text-lg md:text-xl font-bold leading-none">{{slice .Date 0 2}}</span>
                         <span class="text-[10px] md:text-xs font-bold uppercase">{{slice .Date 3}}</span>
                     </div>
-                    <!-- Info -->
                     <div>
                         <h3 class="font-bold text-base md:text-lg group-hover:text-green-400 transition-colors line-clamp-1 mr-2">{{.Name}}</h3> 
                         <p class="text-sm text-gray-400 font-semibold">{{.City}}</p>
                         <p class="text-xs text-gray-500 hidden sm:block">{{.Venue}}</p>
                     </div>
                 </div>
-                <!-- Action -->
                 <a href="{{.TicketUrl}}" target="_blank" class="opacity-100 sm:opacity-0 group-hover:opacity-100 border border-gray-500 hover:border-green-500 hover:text-green-500 text-white text-[10px] md:text-xs font-bold py-1 px-3 md:py-2 md:px-6 rounded-full transition-all shrink-0 ml-auto md:ml-4">Billet</a>
             </div>
             {{else}}
@@ -49,7 +45,6 @@
             {{end}}
         </div>
 
-        <!-- Map Section -->
         <div class="relative w-full h-[500px] lg:h-[70vh] rounded-3xl overflow-hidden shadow-2xl border border-white/10 group order-1 lg:order-2">
             <div id="map-container" class="w-full h-full bg-neutral-800 z-0"></div>
         </div>

@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// Launch initialise les connexions aux API externes et configure les routes API.
 func Launch() {
 	utils.Log("Chargement de l'API...")
 
@@ -19,6 +20,8 @@ func Launch() {
 	utils.Log("API chargés avec succe")
 }
 
+// handleSearch gère les requêtes de recherche d'artistes.
+// Il attend un paramètre de requête "q".
 func handleSearch(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("q")
 	if query == "" {
@@ -37,6 +40,8 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(result)
 }
 
+// handleArtist gère les requêtes pour récupérer les détails d'un artiste.
+// Il attend un paramètre de requête "id".
 func handleArtist(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if id == "" {
@@ -55,6 +60,8 @@ func handleArtist(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(artist)
 }
 
+// handleArtistTopTracks gère les requêtes pour récupérer les titres populaires d'un artiste.
+// Il attend un paramètre de requête "id".
 func handleArtistTopTracks(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if id == "" {

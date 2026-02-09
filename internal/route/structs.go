@@ -2,6 +2,8 @@ package route
 
 import "html/template"
 
+// HomeData contient les données affichées sur la page d'accueil,
+// notamment les artistes populaires et les suggestions.
 type HomeData struct {
 	TopTitre_list template.HTML
 
@@ -29,12 +31,14 @@ type HomeData struct {
 	PromArtist_track03_time string
 }
 
+// TrackData structure les informations détaillées d'une piste musicale.
 type TrackData struct {
 	Rank     int
 	Title    string
 	Duration string
 }
 
+// ConcertData structure les informations détaillées d'un concert.
 type ConcertData struct {
 	Name      string
 	Date      string
@@ -45,6 +49,7 @@ type ConcertData struct {
 	Lng       string
 }
 
+// ArtistData contient toutes les informations nécessaires à l'affichage de la page d'un artiste.
 type ArtistData struct {
 	Artist_img_url    string
 	Artist_name       string
@@ -55,6 +60,7 @@ type ArtistData struct {
 	Artist_url        string
 }
 
+// ArtistListItem représente un artiste dans une liste simplifiée (ex: résultats de recherche).
 type ArtistListItem struct {
 	Image string
 	Nom   string
@@ -62,10 +68,12 @@ type ArtistListItem struct {
 	ID    string
 }
 
+// ArtistListData contient une liste d'artistes à afficher.
 type ArtistListData struct {
 	Artistes []ArtistListItem
 }
 
+// ConcertPageData contient la liste des concerts à afficher sur la page concerts.
 type ConcertPageData struct {
 	Events []ConcertData
 }
