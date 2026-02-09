@@ -95,3 +95,13 @@ SMSM/
 | `/search` | Résultat de la recherche d'un artiste. |
 | `/artiste/{id}` | Page de détail d'un artiste (infos, musiques, concerts). |
 | `/concert` | Liste des concerts via Ticketmaster. |
+
+## 📅 Gestion de projet
+
+Le suivi, la roadmap et l'organisation des tâches sont gérés sur **Notion**.
+
+[![Gestion de projet](image.png)](https://www.notion.so/2c55676fbcad80188141fcce19b08709?v=2c55676fbcad804da05f000c2a3de9f4&source=copy_link)
+
+🔗 **[Accéder au tableau de bord Notion](https://www.notion.so/2c55676fbcad80188141fcce19b08709?v=2c55676fbcad804da05f000c2a3de9f4&source=copy_link)**
+
+🔗 **[Accéder au dépot Github](https://github.com/leo-gaiguantanquit/Spotify-mais-sans-la-musique)**
