@@ -27,7 +27,7 @@
 			} else {
 				document.documentElement.classList.add('theme-light');
 				localStorage.setItem('theme', 'light');
-                document.getElementById('nav_logo').src ="../static/img/LightLogo.png";
+                document.getElementById('nav__logo').src ="../static/img/LightLogo.png";
 			}
 		});
 	});
