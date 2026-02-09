@@ -19,6 +19,11 @@ type PageData struct {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path != "/" {
+		renderFile("Cieelll - 404", render("404", nil), w)
+		return
+	}
+
 	topArtistID := "5y239Fviw0hAOe5Jy3qzlf"
 	promArtistID := "2pGLZYyPlXH1rkOsxRdZ0h"
 
@@ -103,15 +108,14 @@ func home(w http.ResponseWriter, r *http.Request) {
 func artist(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(r.URL.Path, "/")
 	if len(parts) < 3 || parts[2] == "" {
-		http.NotFound(w, r)
+		renderFile("Cieelll - 404", render("404", nil), w)
 		return
 	}
 	artistID := parts[2]
 
 	artist, err := api.GetArtist(artistID)
 	if err != nil {
-		utils.LogError("Error getting artist", err)
-		http.Error(w, "Artist not found", http.StatusNotFound)
+		renderFile("Cieelll - 404", render("404", nil), w)
 		return
 	}
 
