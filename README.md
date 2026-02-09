@@ -85,3 +85,13 @@ SMSM/
 ├── config.json          # Fichier de configuration (à créer)
 └── go.mod               # Gestion des dépendances Go
 ```
+
+## 🌐 Routes de l'application
+
+| Route | Description |
+| :--- | :--- |
+| `/` | Page d'accueil avec suggestions et artistes populaires. |
+| `/artistes` | Catalogue complet des artistes disponibles. |
+| `/search` | Résultat de la recherche d'un artiste. |
+| `/artiste/{id}` | Page de détail d'un artiste (infos, musiques, concerts). |
+| `/concert` | Liste des concerts via Ticketmaster. |
