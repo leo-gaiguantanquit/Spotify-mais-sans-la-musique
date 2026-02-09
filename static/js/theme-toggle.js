@@ -10,8 +10,11 @@
 		let isDark;
 		if (saved) {
 			isDark = saved === 'dark';
+			document.getElementById('nav__logo').src ="../static/img/DarkLogo.png";
 		} else {
 			isDark = !window.matchMedia || !window.matchMedia('(prefers-color-scheme: light)').matches;
+			document.getElementById('nav__logo').src ="../static/img/LightLogo.png";
+
 		}
 
 		// applique le thème
